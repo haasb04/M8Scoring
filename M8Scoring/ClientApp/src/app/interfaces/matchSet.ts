@@ -1,12 +1,13 @@
 interface MatchSet {
   Id: number;
-  Match: Match;
   SetNumber: number;
   Player1: Player;
   Player2: Player;
-  p1Score: number;
-  p2Score: number;
-  win: boolean;
-  p1forfeit: boolean;
-  p2forfeit: boolean;
+  P1Rate: number;
+  P1Score: number;
+  P2Rate: number;
+  P2Score: number;
+  Win: boolean;
+  P1forfeit: boolean;
+  P2forfeit: boolean;
 }

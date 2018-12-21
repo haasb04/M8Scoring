@@ -1,5 +1,26 @@
-<p>
-  match works! for me.
-  
-</p><div>{{matchService.match.Id}}</div>
-<div>{{matchService.match.Opponent.Players[0].Name}}</div>
+<div>Match:  {{match.Team.Name}} vs {{match.Opponent.Name}} </div>
+<div>{{match.Id}}</div>
+<hr />
+<form #matchForm="ngForm">
+  <table>
+    <tr>
+      <th></th>
+      <th>Set</th>
+      <th>Name - Rate</th>
+      <th>Score</th>
+      <th>Win?</th>
+      <th></th>
+      <th></th>
+      <th>Set</th>
+      <th>Name - Rate</th>
+      <th>Score</th>
+    </tr>
+    <app-match-set [matchSet]='match.Set1'></app-match-set>
+    <app-match-set [matchSet]='match.Set2'></app-match-set>
+    <app-match-set [matchSet]="match.Set3"></app-match-set>
+    <app-match-set [matchSet]="match.Set4"></app-match-set>
+    <app-match-set [matchSet]="match.Set5"></app-match-set>
+
+
+  </table>
+</form>

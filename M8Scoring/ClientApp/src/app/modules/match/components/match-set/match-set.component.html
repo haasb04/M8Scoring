@@ -1,0 +1,12 @@
+<tr>
+  <td><input type="button" (click)="setPlayer()" value="Set Player" /></td>
+  <td>{{matchSet.SetNumber}}</td>
+  <td>{{matchSet.P1Rate}}</td>
+  <td><input type="text" [(ngModel)]="matchSet.P1Score" /></td>
+  <td><input type="checkbox" [(ngModel)]="matchSet.Win" /></td>
+  <td></td>
+  <td><input type="button" (click)="setOpponent()" value="Set Opponent" /></td>
+  <td>{{matchSet.SetNumber}}</td>
+  <td>{{matchSet.P2Rate}}</td>
+  <td><input type="text" [(ngModel)]="matchSet.P2Score" /></td>
+</tr>
