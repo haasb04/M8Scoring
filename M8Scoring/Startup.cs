@@ -1,7 +1,9 @@
+using M8Scoring.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +17,13 @@ namespace M8Scoring {
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services) {
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+			//Add EntityFramework Support for SqlServer
+			services.AddEntityFrameworkSqlServer();
+
+			//Add ApplicationDbContext
+			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
 			// In production, the Angular files will be served from this directory
 			services.AddSpaStaticFiles(configuration =>
@@ -53,6 +61,16 @@ namespace M8Scoring {
 					spa.UseAngularCliServer(npmScript: "start");
 				}
 			});
+
+			//create a service scope to get an ApplicationDbContext isntance using DI
+			using(var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope()) {
+				var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+				//create the db if it doesnt exits and applies and pending migration.
+				dbContext.Database.Migrate();
+
+				//Seed the db
+				DbSeeder.Seed(dbContext);
+			}
 		}
 	}
 }
