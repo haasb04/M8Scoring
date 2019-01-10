@@ -9,23 +9,35 @@ import { MatchService } from '../../../../services/match.service';
 })
 export class MatchSetComponent implements OnInit {
   @Input() matchSet: MatchSet;
-  constructor(private matchService: MatchService) { }
+
+  constructor(private matchService: MatchService) {
+  }
 
   ngOnInit() {
   
   }
 
-  setPlayer() {
-    //show team player selector
-    this.matchSet.Player1 = <Player>this.matchService.match.Team.Players[2];
-    this.matchSet.P1Rate = this.matchSet.Player1.Rate;
+  set player1Score(score: number) {
+    this.matchSet.Player1.Score = score;
+    this.matchService.calculateMatch();
   }
+  get player1Score(): number { return this.matchSet.Player1.Score; }
 
-  setOpponent() {
-    //show opponent player selector
-    this.matchSet.Player2 = <Player>this.matchService.match.Opponent.Players[3];
-    this.matchSet.P2Rate = this.matchSet.Player2.Rate;
-
+  set player2Score(score: number) {
+    this.matchSet.Player2.Score = score;
+    this.matchService.calculateMatch();
   }
+  get player2Score(): number { return this.matchSet.Player2.Score; }
 
+  set player1Rate(rate: number) {
+    this.matchSet.Player1.Rate = rate;
+    this.matchService.calculateMatch();
+  }
+  get player1Rate(): number { return this.matchSet.Player1.Rate; }
+
+  set player2Rate(rate: number) {
+    this.matchSet.Player2.Rate = rate;
+    this.matchService.calculateMatch();
+  }
+  get player2Rate(): number { return this.matchSet.Player2.Rate; }
 }

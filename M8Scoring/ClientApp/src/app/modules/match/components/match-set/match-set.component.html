@@ -1,12 +1,21 @@
-<tr>
-  <td><input type="button" (click)="setPlayer()" value="Set Player" /></td>
-  <td>{{matchSet.SetNumber}}</td>
-  <td>{{matchSet.P1Rate}}</td>
-  <td><input type="text" [(ngModel)]="matchSet.P1Score" /></td>
-  <td><input type="checkbox" [(ngModel)]="matchSet.Win" /></td>
-  <td></td>
-  <td><input type="button" (click)="setOpponent()" value="Set Opponent" /></td>
-  <td>{{matchSet.SetNumber}}</td>
-  <td>{{matchSet.P2Rate}}</td>
-  <td><input type="text" [(ngModel)]="matchSet.P2Score" /></td>
-</tr>
+<h4>Set {{matchSet.SetNumber}}</h4>
+<div class="row">
+  <div class="col-xs-1 selectorWidth"></div>
+  <div class="col-xs-4">Player</div>
+  <div class="col-xs-2 col-lg-1">Rate</div>
+  <div class="col-xs-2 col-lg-1">Score</div>
+  <div class="col-xs-1">Win?</div>
+</div>
+<div class="row">
+  <div class="col-xs-1 selectorWidth"><app-player-selector [team]="matchService.match.Team" [matchSetPlayer]="matchSet.Player1"></app-player-selector></div>
+  <div class="col-xs-4">{{matchSet.Player1.Player?.Name}}</div>
+  <div class="col-xs-2 col-lg-1"><input class="form-control scoreInput" type="number" [(ngModel)]="player1Rate" name="set1P1Rate" /></div>
+  <div class="col-xs-2 col-lg-1"><input class="form-control scoreInput" type="number" [(ngModel)]="player1Score" name="set1P1score" /></div>
+  <div class="col-xs-1"><input type="checkbox" [(ngModel)]="matchSet.Win" name="set1p1win" /></div>
+</div>
+<div class="row">
+  <div class="col-xs-1 selectorWidth"><app-player-selector [team]="matchService.match.Opponent" [matchSetPlayer]="matchSet.Player2"></app-player-selector></div>
+  <div class="col-xs-4">{{matchSet.Player2.Player?.Name}}</div>
+  <div class="col-xs-2 col-lg-1"><input class="form-control scoreInput" type="number" [(ngModel)]="player2Rate" name="set1P2Rate" /></div>
+  <div class="col-xs-2 col-lg-1"><input class="form-control scoreInput" type="number" [(ngModel)]="player2Score" name="set1P2score" /></div>
+</div>

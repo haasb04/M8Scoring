@@ -2,25 +2,11 @@
 <div>{{match.Id}}</div>
 <hr />
 <form #matchForm="ngForm">
-  <table>
-    <tr>
-      <th></th>
-      <th>Set</th>
-      <th>Name - Rate</th>
-      <th>Score</th>
-      <th>Win?</th>
-      <th></th>
-      <th></th>
-      <th>Set</th>
-      <th>Name - Rate</th>
-      <th>Score</th>
-    </tr>
-    <app-match-set [matchSet]='match.Set1'></app-match-set>
-    <app-match-set [matchSet]='match.Set2'></app-match-set>
-    <app-match-set [matchSet]="match.Set3"></app-match-set>
-    <app-match-set [matchSet]="match.Set4"></app-match-set>
-    <app-match-set [matchSet]="match.Set5"></app-match-set>
+  <div>Score:  Us - {{match.TotalScore}}  Them - {{match.TotalOpponentScore}}</div>
+  <app-match-set [matchSet]="match.Set1"></app-match-set>
+  <app-match-set [matchSet]="match.Set2"></app-match-set>
+  <app-match-set [matchSet]="match.Set3"></app-match-set>
+  <app-match-set [matchSet]="match.Set4"></app-match-set>
+  <app-match-set [matchSet]="match.Set5"></app-match-set>
 
-
-  </table>
 </form>

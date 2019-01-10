@@ -11,13 +11,14 @@ import { CounterComponent } from './components/counter/counter.component';
 import { FetchDataComponent } from './components/fetch-data/fetch-data.component';
 import { MatchModule } from './modules/match/match.module';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent,
+    FetchDataComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

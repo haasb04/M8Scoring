@@ -10,4 +10,19 @@ interface Match {
   Set3: MatchSet;
   Set4: MatchSet;
   Set5: MatchSet;
+  //settings
+  WinMultiplier: number;
+  OverUnderLimit: number;
+  PenaltyMultiplier: number;
+  NonRatedPlayerRate: number;
+  IsRegularSeason: boolean;
+
+  //calcualted values
+  TotalScore: number;
+  TotalOpponentScore: number;
+  TotalRate: number;
+  OpponentTotalRate: number;
+  TeamBonusOrPenalty: number;
+  OpponentBonusOrPenalty: number;
+
 }
