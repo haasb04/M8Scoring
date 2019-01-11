@@ -1,0 +1,4 @@
+<h2>{{title}}</h2>
+<ul class="Teams">
+  <li *ngFor="let team of teams" [class.selected]="team == selectedTeam" (click)="onSelect(team)"><span>{{team.Name}}</span></li>
+</ul>

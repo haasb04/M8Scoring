@@ -9,10 +9,10 @@ namespace M8Scoring.Data {
 	public class Team {
 
 		public Team() {
-			this.TeamPlayers = new HashSet<TeamPlayer>();
+
 		}
 
-		public ICollection<TeamPlayer> TeamPlayers { get; set; }
+		public ICollection<TeamPlayer> TeamPlayers { get; } = new List<TeamPlayer>();
 
 		#region "Methods"
 
@@ -21,7 +21,6 @@ namespace M8Scoring.Data {
 		#region "Properties"
 		[Key]
 		[Required]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
 
 		[Required]

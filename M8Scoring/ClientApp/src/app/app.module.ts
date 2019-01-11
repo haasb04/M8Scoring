@@ -10,6 +10,7 @@ import { HomeComponent } from './components/home/home.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { FetchDataComponent } from './components/fetch-data/fetch-data.component';
 import { MatchModule } from './modules/match/match.module';
+import { TeamListComponent } from './components/team-list/team-list.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { MatchModule } from './modules/match/match.module';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    TeamListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

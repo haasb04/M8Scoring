@@ -1,0 +1,8 @@
+ul.teams li{
+  color: #000acb;
+  cursor: pointer;
+}
+
+ul.teams li.selected{
+  background-color: #cccccc;
+}

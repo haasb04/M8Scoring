@@ -45,27 +45,40 @@ namespace M8Scoring.Data {
 			DateTime createdDate = new DateTime(2019, 01, 10, 12, 30, 0);
 			DateTime lastModifiedDate = DateTime.Now;
 
-			for(int i = 1; i <= 100; i++) {
-				var p = new Player() { Number = i, FirstName = string.Format("P{0}", i), LastName = string.Format("LN{0}", i), Rating = 65, CreatedDate = createdDate, LastModifiedDate = lastModifiedDate };
-				dbContext.Players.Add(p);
-			}
-			dbContext.SaveChanges();
+			using(var tr = dbContext.Database.BeginTransaction()) {
+				try {
+					for(int i = 0; i < 250; i++) {
+						var p = new Player() { Number = i + 1, FirstName = string.Format("P{0}", i + 1), LastName = string.Format("LN{0}", i + 1), Rating = 65, CreatedDate = createdDate, LastModifiedDate = lastModifiedDate };
+						dbContext.Players.Add(p);
+						dbContext.SaveChanges();
+					}
 
-			for(int i = 0; i < 50; i++) {
-				//create team
-				var t = new Team() { Number = i, Name = string.Format("Team {0}", i+1), CreatedDate = createdDate, LastModifiedDate = lastModifiedDate };
-				dbContext.Teams.Add(t);
-				//add players
-				int playerStart = i * 5;
-				for(int o = 0; o < 5; o++) {
-					int playerNum = playerStart + o + 1;
-					var player = dbContext.Players.Where(p => p.Number == playerNum).SingleOrDefault();
-					t.TeamPlayers.Add(new TeamPlayer() { Team = t, Player = player });					
+					for(int i = 0; i < 50; i++) {
+						//create team
+						var t = new Team() { Number = i + 1, Name = string.Format("Team {0}", i + 1), CreatedDate = createdDate, LastModifiedDate = lastModifiedDate };
+						dbContext.Teams.Add(t);
+						dbContext.SaveChanges();
+
+						//add players
+						int playerStart = i * 5;
+						for(int o = 0; o < 5; o++) {
+							int playerNum = playerStart + o + 1;
+							var player = dbContext.Players.Where(p => p.Number == playerNum).SingleOrDefault();
+							//if(player != null) {
+							t.TeamPlayers.Add(new TeamPlayer() { Team = t, Player = player });
+							//}
+							if(player == null) {
+								System.Diagnostics.Debug.WriteLine(playerNum);
+							}
+						}
+					}
+					dbContext.SaveChanges();
+					tr.Commit();
+				} catch(Exception) {
+					tr.Rollback();
 				}
 			}
-			dbContext.SaveChanges();
 		}
-
 		#endregion
 	}
 }
