@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using M8Scoring.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace M8Scoring.Data {
 	public class Team {
@@ -15,7 +17,9 @@ namespace M8Scoring.Data {
 		public ICollection<TeamPlayer> TeamPlayers { get; } = new List<TeamPlayer>();
 
 		#region "Methods"
-
+		public static PaginatedList<TeamViewModel> PrepareData(DbSet<Team> data, SortFilterParameter sortFilter) {
+			return null;
+		}
 		#endregion
 
 		#region "Properties"
