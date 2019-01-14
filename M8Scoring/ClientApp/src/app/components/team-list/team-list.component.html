@@ -1,4 +1,18 @@
 <h2>{{title}}</h2>
-<ul class="Teams">
-  <li *ngFor="let team of teams" [class.selected]="team == selectedTeam" (click)="onSelect(team)"><span>{{team.Name}}</span></li>
-</ul>
+<table class="table" sortable-table (sorted)="onSorted($event)">
+  <thead>
+    <tr>
+      <th sortable-column="id" sort-direction="asc">Id</th>
+      <th sortable-column="number">Number</th>
+      <th sortable-column="name">Name</th>
+    </tr>
+  </thead>
+  <tbody> 
+    <tr *ngFor="let team of teams">
+      <td>{{team.Id}}</td>
+      <td>{{team.Number}}</td>
+      <td>{{team.Name}}</td>
+    </tr>
+  </tbody>
+</table>
+<table-paging totalPages="totalPages" (pageChanged)="onPageChanged($event)"></table-paging>

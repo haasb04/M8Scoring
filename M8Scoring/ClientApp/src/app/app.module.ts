@@ -11,6 +11,10 @@ import { CounterComponent } from './components/counter/counter.component';
 import { FetchDataComponent } from './components/fetch-data/fetch-data.component';
 import { MatchModule } from './modules/match/match.module';
 import { TeamListComponent } from './components/team-list/team-list.component';
+import { SortableColumnComponent } from './components/sortable-column/sortable-column.component';
+import { SortService } from './services/sort.service';
+import { SortableTableDirective } from './directives/sortable-table.directive';
+import { TablePagingComponent } from './components/table-paging/table-paging.component';
 
 
 @NgModule({
@@ -20,7 +24,10 @@ import { TeamListComponent } from './components/team-list/team-list.component';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    TeamListComponent
+    TeamListComponent,
+    SortableColumnComponent,
+    SortableTableDirective,
+    TablePagingComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -35,7 +42,7 @@ import { TeamListComponent } from './components/team-list/team-list.component';
     MatchModule
     
   ],
-  providers: [],
+  providers: [SortService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
