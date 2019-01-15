@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace M8Scoring.ViewModels {
 	/// <summary>
-	/// Used to deserialzied PARAMETER info sent FROM client
+	/// 
 	/// </summary>
-	public class SortFilterParameter {
+	public class ListSpfOutput {
 
 		#region Constructors
-		public SortFilterParameter() {
+		public ListSpfOutput() {
 
 		}
 
@@ -20,7 +20,9 @@ namespace M8Scoring.ViewModels {
 		public int PageSize { get; set; }
 		public int TotalCount { get; set; }
 		public int TotalPages { get; set; }
-		public object[] Data { get; set; }
+		public int PageIndex { get; set; }
+		public bool HasPreviousPage { get; set; }
+		public bool HasNextPage { get; set; }
 		#endregion
 
 

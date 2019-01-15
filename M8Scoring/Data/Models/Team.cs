@@ -17,7 +17,7 @@ namespace M8Scoring.Data {
 		public ICollection<TeamPlayer> TeamPlayers { get; } = new List<TeamPlayer>();
 
 		#region "Methods"
-		public static PaginatedList<TeamViewModel> PrepareData(DbSet<Team> data, SortFilterParameter sortFilter) {
+		public static PaginatedList<TeamViewModel> PrepareData(DbSet<Team> data, ListSpfOutput sortFilter) {
 			return null;
 		}
 		#endregion

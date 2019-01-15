@@ -8,46 +8,50 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace M8Scoring.ViewModels {
-	public class TeamListViewModel : SortFilterBase {
+	public class TeamListViewModel : SpfListViewModelBase {
 		#region Constructors
 		public TeamListViewModel() {	}
+
+		public TeamListViewModel(string spfJson): base(spfJson) {
+
+		}
 		#endregion
 
 		#region Properties
 
-		[JsonIgnore()]
-		public DbSet<Team> DbSet { get; set; }
+		public TeamViewModel[] Data { get; set; }
+
 		#endregion
 
 		#region Methods
-		public void PrepareData() {
+		public void PrepareData(IQueryable<Team> DbSet) {
 			
 			IQueryable<TeamViewModel> teams = DbSet.Select(t => new TeamViewModel { Id = t.Id, Name = t.Name, Number = t.Number });
 
-			if(!string.IsNullOrEmpty(Filter)) {
+			if(!string.IsNullOrEmpty(SpfInput.Filter)) {
 				int termAsInt = -1;
-				int.TryParse(Filter, out termAsInt);
+				int.TryParse(SpfInput.Filter, out termAsInt);
 
-				teams = teams.Where(t => t.Name.Contains(Filter) || t.Number == termAsInt);
+				teams = teams.Where(t => t.Name.Contains(SpfInput.Filter) || t.Number == termAsInt);
 			}
 
-			switch(SortCol) {
+			switch(SpfInput.SortCol) {
 				case "Id":
-					if(SortOrder) {
+					if(SpfInput.SortOrder) {
 						teams = teams.OrderByDescending(t => t.Id);
 					} else {
 						teams = teams.OrderBy(t => t.Id);
 					}
 					break;
 				case "Name":
-					if(SortOrder) {
+					if(SpfInput.SortOrder) {
 						teams = teams.OrderByDescending(t => t.Name);
 					} else {
 						teams = teams.OrderBy(t => t.Name);
 					}
 					break;
 				case "Number":
-					if(SortOrder) {
+					if(SpfInput.SortOrder) {
 						teams = teams.OrderByDescending(t => t.Number);
 					} else {
 						teams = teams.OrderBy(t => t.Number);
@@ -58,8 +62,8 @@ namespace M8Scoring.ViewModels {
 					break;
 			}
 
-			PaginatedList<TeamViewModel> list = new PaginatedList<TeamViewModel>(teams, PageIndex ?? 0, PageSize);
-			this.SetReturnData(list);
+			PaginatedList<TeamViewModel> list = new PaginatedList<TeamViewModel>(teams, SpfInput.PageIndex ?? 0, SpfInput.PageSize);
+			SetSpfOutput<TeamViewModel>(list);
 			Data = list.ToArray(); 
 		}
 		#endregion

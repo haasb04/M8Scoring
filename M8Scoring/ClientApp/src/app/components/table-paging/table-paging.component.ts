@@ -37,3 +37,20 @@ export interface PageChangedEvent {
   oldPage: number;
   newPage: number;
 }
+
+export interface ListSpfInput {
+  SortCol: string;
+  SortOrder: boolean;
+  Filter: string;
+  PageIndex: number;
+  PageSize: number;
+}
+
+export interface ListSpfOutput {
+  PageSize: number;
+  TotalCount: number;
+  TotalPages: number;
+  PageIndex: number;
+  HasPreviousPage: boolean;
+  HasNextPage: boolean;
+}

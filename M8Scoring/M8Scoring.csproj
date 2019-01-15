@@ -46,6 +46,7 @@
     <None Remove="ClientApp\src\app\interfaces\MatchSetPlayer.ts" />
     <None Remove="ClientApp\src\app\interfaces\player.ts" />
     <None Remove="ClientApp\src\app\interfaces\team.ts" />
+    <None Remove="ClientApp\src\app\interfaces\TeamList.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,6 +60,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\player.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\matchSet.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\team.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\teamList.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
