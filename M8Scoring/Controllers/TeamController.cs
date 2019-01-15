@@ -35,11 +35,12 @@ namespace M8Scoring.Controllers {
 		}
 
 		[HttpGet("all")]
-		public IActionResult GetTeams(string viewState) {
-			TeamListViewModel viewModel = (viewState != null ? JsonConvert.DeserializeObject<TeamListViewModel>(viewState) : new TeamListViewModel());
-			viewModel.DbSet = mDbContext.Teams;
+		public IActionResult GetTeams(string sortFilterState) {
+			TeamListViewModel viewModel = new TeamListViewModel(sortFilterState);
+			viewModel.Source = mDbContext.Teams.AsQueryable();
 			viewModel.PrepareData();
-
+			//viewModel
+			//{ "PageSize":x, "TotalCount":x, "TotalPages":x, "PageIndex":x, "HasPreviousPage":true, "HasNextPage":false, "object[]":Data}
 			return new JsonResult(viewModel, new JsonSerializerSettings() { Formatting = Formatting.Indented });
 		}
 
