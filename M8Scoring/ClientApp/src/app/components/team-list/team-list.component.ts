@@ -1,8 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { ColumnSortedEvent } from '../../services/sort.service';
-import { PageChangedEvent, ListSpfInput, ListSpfOutput } from '../table-paging/table-paging.component';
 import { TeamList } from '../../interfaces/TeamList';
 
 @Component({
@@ -21,7 +19,7 @@ export class TeamListComponent {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.title = "Teams";
-    this.url = baseUrl + "api/Team/all";
+    this.url = baseUrl + "api/Team/";
     //this.spfInputs = {};
     //this.spfInputs.Filter = "";
     //this.spfInputs.SortOrder = false;
@@ -29,7 +27,8 @@ export class TeamListComponent {
     //this.spfInputs.PageSize = 10;
     //this.spfInputs.PageIndex = 1;
 
-    this.spfInputs = { Filter: null, SortOrder: false, SortCol: "Name", PageSize: 10, PageIndex: 0 }; 
+    this.spfInputs = { Filter: null, SortOrder: false, SortCol: "Name", PageSize: 10, PageIndex: 0 };
+    this.spfOutputs = { HasNextPage: false, HasPreviousPage: false, PageIndex: 1, PageSize: 10, TotalCount: 0, TotalPages: 0 };
     this.getTeams();
   }
 
@@ -39,6 +38,7 @@ export class TeamListComponent {
   }
 
   onSorted(column: ColumnSortedEvent) {
+    this.spfInputs.PageIndex = 0;
     this.spfInputs.SortCol = column.sortColumn;
     this.spfInputs.SortOrder = column.sortDirection == "desc" ? false : true;
     this.getTeams();
@@ -46,16 +46,16 @@ export class TeamListComponent {
   }
 
   onPageChanged(page: PageChangedEvent) {
-    this.spfInputs.PageIndex = page.newPage;
-    this.getTeams();
-    console.log("changed page: " + page.newPage);
+      this.spfInputs.PageIndex = page.newPage;
+      this.getTeams();
+      console.log("changed page: " + page.newPage);
   }
 
   getTeams() {
-    this.http.get<TeamList>(this.url + '?listSpfInput=' + encodeURIComponent(JSON.stringify(this.spfInputs)))
+    this.http.get<TeamList>(this.url + 'all?listSpfInput=' + encodeURIComponent(JSON.stringify(this.spfInputs)))
       .subscribe(result => {
         this.teams = result.Data;
-        this.spfOutputs = Object.assign({}, result.SpfOutput);
+        this.spfOutputs = result.SpfOutput;
 
     }, error => console.error(error));
   }

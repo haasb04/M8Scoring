@@ -1,4 +1,5 @@
 <h2>{{title}}</h2>
+<table-filter placeholder="Search Teams" quickSearchUrl="url"></table-filter>
 <table class="table" sortable-table (sorted)="onSorted($event)">
   <thead>
     <tr>
@@ -15,4 +16,4 @@
     </tr>
   </tbody>
 </table>
-<table-paging totalPages="totalPages" spfData="spfOutputs" (pageChanged)="onPageChanged($event)"></table-paging>
+<table-paging totalPages="totalPages" [(spfData)]="spfOutputs" (pageChanged)="onPageChanged($event)"></table-paging>

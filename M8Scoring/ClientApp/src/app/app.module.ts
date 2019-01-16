@@ -11,11 +11,8 @@ import { CounterComponent } from './components/counter/counter.component';
 import { FetchDataComponent } from './components/fetch-data/fetch-data.component';
 import { MatchModule } from './modules/match/match.module';
 import { TeamListComponent } from './components/team-list/team-list.component';
-import { SortableColumnComponent } from './components/sortable-column/sortable-column.component';
-import { SortService } from './services/sort.service';
-import { SortableTableDirective } from './directives/sortable-table.directive';
-import { TablePagingComponent } from './components/table-paging/table-paging.component';
 
+import { UtilitiesModule } from './modules/utilities/utitlies.module';
 
 @NgModule({
   declarations: [
@@ -24,10 +21,7 @@ import { TablePagingComponent } from './components/table-paging/table-paging.com
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    TeamListComponent,
-    SortableColumnComponent,
-    SortableTableDirective,
-    TablePagingComponent
+    TeamListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -39,10 +33,10 @@ import { TablePagingComponent } from './components/table-paging/table-paging.com
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'match', loadChildren: './modules/match/match.module#MatchModule'},
     ]),
-    MatchModule
+    MatchModule,
+    UtilitiesModule
     
   ],
-  providers: [SortService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

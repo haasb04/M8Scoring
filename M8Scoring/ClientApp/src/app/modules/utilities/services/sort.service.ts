@@ -14,8 +14,3 @@ export class SortService {
     this.columnSortedSource.next(event);
   }
 }
-
-export interface ColumnSortedEvent {
-  sortColumn: string;
-  sortDirection: string;
-}

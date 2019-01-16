@@ -47,6 +47,10 @@
     <None Remove="ClientApp\src\app\interfaces\player.ts" />
     <None Remove="ClientApp\src\app\interfaces\team.ts" />
     <None Remove="ClientApp\src\app\interfaces\TeamList.ts" />
+    <None Remove="ClientApp\src\app\modules\utilities\interfaces\ColumnSortedEvent.ts" />
+    <None Remove="ClientApp\src\app\modules\utilities\interfaces\ListSpfInput.ts" />
+    <None Remove="ClientApp\src\app\modules\utilities\interfaces\ListSpfOutput.ts" />
+    <None Remove="ClientApp\src\app\modules\utilities\interfaces\PageChangedEvent.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,6 +65,10 @@
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\matchSet.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\team.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\teamList.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\utilities\interfaces\ColumnSortedEvent.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\utilities\interfaces\ListSpfInput.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\utilities\interfaces\ListSpfOutput.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\utilities\interfaces\PageChangedEvent.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
