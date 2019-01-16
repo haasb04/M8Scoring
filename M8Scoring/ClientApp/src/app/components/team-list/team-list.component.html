@@ -2,9 +2,9 @@
 <table class="table" sortable-table (sorted)="onSorted($event)">
   <thead>
     <tr>
-      <th sortable-column="id" sort-direction="asc">Id</th>
-      <th sortable-column="number">Number</th>
-      <th sortable-column="name">Name</th>
+      <th sortable-column="Id">Id</th>
+      <th sortable-column="Number">Number</th>
+      <th sortable-column="Name">Name</th>
     </tr>
   </thead>
   <tbody> 
@@ -15,4 +15,4 @@
     </tr>
   </tbody>
 </table>
-<table-paging totalPages="totalPages" (pageChanged)="onPageChanged($event)"></table-paging>
+<table-paging totalPages="totalPages" spfData="spfOutputs" (pageChanged)="onPageChanged($event)"></table-paging>

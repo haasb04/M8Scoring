@@ -1,3 +1,3 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=TeamList.js.map
+//# sourceMappingURL=teamList.js.map

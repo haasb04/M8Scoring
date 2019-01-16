@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { ColumnSortedEvent } from '../../services/sort.service';
-import { PageChangedEvent, ListSpfInput } from '../table-paging/table-paging.component';
+import { PageChangedEvent, ListSpfInput, ListSpfOutput } from '../table-paging/table-paging.component';
 import { TeamList } from '../../interfaces/TeamList';
 
 @Component({
@@ -16,7 +16,8 @@ export class TeamListComponent {
   teams: Team[];
   url: string;
   totalPages: 10; //get from server
-  private spfInputs: ListSpfInput;
+  spfInputs: ListSpfInput;
+  spfOutputs: ListSpfOutput;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.title = "Teams";
@@ -28,8 +29,7 @@ export class TeamListComponent {
     //this.spfInputs.PageSize = 10;
     //this.spfInputs.PageIndex = 1;
 
-    let  spf = new ListSpfInput() { Filter: "", SortOrder: false, SortCol: "Name", PageSize: 10, PageIndex: 1 };
-    this.spfInputs = spf; 
+    this.spfInputs = { Filter: null, SortOrder: false, SortCol: "Name", PageSize: 10, PageIndex: 0 }; 
     this.getTeams();
   }
 
@@ -40,18 +40,22 @@ export class TeamListComponent {
 
   onSorted(column: ColumnSortedEvent) {
     this.spfInputs.SortCol = column.sortColumn;
-    this.spfInputs.SortOrder = column.sortDirection == "asc" ? false : true;
+    this.spfInputs.SortOrder = column.sortDirection == "desc" ? false : true;
     this.getTeams();
     console.log("column sorted: " + column.sortColumn);
   }
 
   onPageChanged(page: PageChangedEvent) {
+    this.spfInputs.PageIndex = page.newPage;
+    this.getTeams();
     console.log("changed page: " + page.newPage);
   }
 
   getTeams() {
-    this.http.get<TeamList>(this.url+'?listSpfInput=' + JSON.stringify(this.spfInputs)).subscribe(result => {
-      this.teams = result.Data;
+    this.http.get<TeamList>(this.url + '?listSpfInput=' + encodeURIComponent(JSON.stringify(this.spfInputs)))
+      .subscribe(result => {
+        this.teams = result.Data;
+        this.spfOutputs = Object.assign({}, result.SpfOutput);
 
     }, error => console.error(error));
   }

@@ -6,26 +6,26 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./table-paging.component.css']
 })
 export class TablePagingComponent implements OnInit {
-  currentPage: number;
   pages: number[];
   constructor() {
     this.pages = [0, 1, 2, 3, 4, 5];
   }
 
-  @Input() totalPages: number;
+  @Input() spfData: ListSpfOutput;
   @Output() pageChanged = new EventEmitter<PageChangedEvent>();
 
   ngOnInit() {
-    this.currentPage = 0;
+
   }
 
   onPageChanged(newPage: number) {
-    this.pageChanged.emit({ oldPage: this.currentPage, newPage: newPage });
-    this.currentPage = newPage;
+   //this.pageChanged.emit({ oldPage: this.currentPage, newPage: newPage });
+  
   }
 
   onPrevious() {
-
+   
+   // this.pageChanged(emit({ oldPage: this.spfData.PageIndex, newPage: this.spfData.PageIndex+1 }));
   }
 
   onNext() {
