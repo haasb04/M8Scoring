@@ -1,1 +1,10 @@
-<input type="text" [(ngModel)]="filterText"  placeholder="{{placeholder}}" /><button class="btn btn-primary btn-sm" (click)="onFilter()"><i class="glyphicon glyphicon-search"></i></button>
+<div class="input-group">
+  <input class="form-control" type="search" [(ngModel)]="filterText" placeholder="{{placeholder}}" (keydown)="onKeyDown($event)" />
+  <span class="input-group-btn">
+    <button class="btn btn-primary" (click)="onFilter()"><i class="glyphicon glyphicon-search"></i></button>
+  </span>
+</div>
+<div class="list-group" *ngIf="results.length > 0">
+  <a href="#" class="list-group-item" *ngFor="let result of results; let idx = index"  [class.active]="idx == activeIdx" (click)="setFilter(idx)">{{result}}</a>
+</div>
+

@@ -1,5 +1,10 @@
 <h2>{{title}}</h2>
-<table-filter placeholder="Search Teams" quickSearchUrl="url"></table-filter>
+
+  
+  <div class="col-lg-4 col-md-4 col-sm-4 pull-right">
+    <table-filter placeholder="Search Teams" quickSearchUrl="url"></table-filter>
+  </div>
+
 <table class="table" sortable-table (sorted)="onSorted($event)">
   <thead>
     <tr>
