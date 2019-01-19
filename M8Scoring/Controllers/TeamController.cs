@@ -23,6 +23,13 @@ namespace M8Scoring.Controllers {
 		}
 		#endregion
 
+		[HttpGet("QS/{term}")]
+		public IActionResult QS(string term) {
+			string[] values = { "There", "Once", "Was", "Mouse" };
+
+			return new JsonResult(values, new JsonSerializerSettings() { Formatting = Formatting.Indented });
+		}
+
 		// GET: api/<controller>
 		[HttpGet("all/{num}")]
 		public IActionResult All(int num = 10) {

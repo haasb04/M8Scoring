@@ -1,8 +1,9 @@
-<h2>{{title}}</h2>
+<h1>Time: {{ time | async }}</h1>
 
+<h2>{{title}}</h2>
   
   <div class="col-lg-4 col-md-4 col-sm-4 pull-right">
-    <table-filter placeholder="Search Teams" quickSearchUrl="url"></table-filter>
+    <table-filter placeholder="Search Teams" quickSearchUrl="Team/QS"></table-filter>
   </div>
 
 <table class="table" sortable-table (sorted)="onSorted($event)">

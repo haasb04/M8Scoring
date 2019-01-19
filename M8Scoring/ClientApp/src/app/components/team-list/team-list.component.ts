@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { TeamList } from '../../interfaces/TeamList';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'team-list',
@@ -16,7 +17,10 @@ export class TeamListComponent {
   totalPages: 10; //get from server
   spfInputs: ListSpfInput;
   spfOutputs: ListSpfOutput;
-
+  time = new Observable(observer => {
+    setInterval(() => observer.next(new Date().toString()), 1000)
+  });
+  
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.title = "Teams";
     this.url = baseUrl + "api/Team/";

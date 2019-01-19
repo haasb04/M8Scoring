@@ -1,6 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 import { HttpClient, HttpUrlEncodingCodec } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
+import { Observable, pipe } from 'rxjs';
+import { filter, map, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { fromEvent } from 'rxjs/observable/fromEvent';
 
 @Component({
   host: {
@@ -10,10 +13,12 @@ import { Subject } from 'rxjs/Subject';
   templateUrl: './table-filter.component.html',
   styleUrls: ['./table-filter.component.css']
 })
-export class TableFilterComponent implements OnInit {
+export class TableFilterComponent implements OnInit, AfterViewInit {
   results: string[];
   activeIdx: number;
   filterText = '';
+  searchBox: HTMLElement;
+  typeahead$: Observable<{}>;
 
   constructor(private mEref: ElementRef, private http: HttpClient) {
     this.results = new Array<string>();
@@ -23,7 +28,24 @@ export class TableFilterComponent implements OnInit {
   @Input() quickSearchUrl: string;
   @Output() filtered = new EventEmitter();
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  ngAfterViewInit() {
+    this.searchBox = document.getElementById('search-box');
+    this.typeahead$ = fromEvent(this.searchBox, 'input').pipe(
+      map((e: KeyboardEvent) => e.target.value),
+      filter(text => text.length > 2),
+      filter(text => text.length < 5),
+      debounceTime(1000),
+      distinctUntilChanged(),
+      switchMap((text:string) => this.http.get(this.quickSearchUrl + '/' + encodeURIComponent(text)))
+    );
+
+    this.typeahead$.subscribe(data => {
+      console.log(data);
+      //Console.log("searching quicksearch..");
+      let i = 1;
+    }, err => console.log(err))
   }
 
   onOutsideClick(event) {
@@ -74,8 +96,7 @@ export class TableFilterComponent implements OnInit {
   }
 
   search() {
-    //call server api (this.quickSearchUrl).  Should return an array of strings.
-    //should only search after typing stops.  Then sets results into the results array.
+
   }
 
   clearList() {
