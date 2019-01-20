@@ -64,6 +64,7 @@ namespace M8Scoring.ViewModels {
 
 			PaginatedList<TeamViewModel> list = new PaginatedList<TeamViewModel>(teams, SpfInput.PageIndex ?? 0, SpfInput.PageSize);
 			SetSpfOutput<TeamViewModel>(list);
+			this.SpfOutput.Filtered = !string.IsNullOrEmpty(this.SpfInput.Filter);
 			Data = list.ToArray(); 
 		}
 		#endregion

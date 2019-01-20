@@ -5,4 +5,5 @@ interface ListSpfOutput {
   PageIndex: number;
   HasPreviousPage: boolean;
   HasNextPage: boolean;
+  Filtered: boolean;
 }

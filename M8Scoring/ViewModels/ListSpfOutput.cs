@@ -23,6 +23,7 @@ namespace M8Scoring.ViewModels {
 		public int PageIndex { get; set; }
 		public bool HasPreviousPage { get; set; }
 		public bool HasNextPage { get; set; }
+		public bool Filtered { get; set; }
 		#endregion
 
 

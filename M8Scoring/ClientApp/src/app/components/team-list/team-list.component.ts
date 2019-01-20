@@ -32,7 +32,7 @@ export class TeamListComponent {
     //this.spfInputs.PageIndex = 1;
 
     this.spfInputs = { Filter: null, SortOrder: false, SortCol: "Name", PageSize: 10, PageIndex: 0 };
-    this.spfOutputs = { HasNextPage: false, HasPreviousPage: false, PageIndex: 1, PageSize: 10, TotalCount: 0, TotalPages: 0 };
+    this.spfOutputs = { HasNextPage: false, HasPreviousPage: false, PageIndex: 1, PageSize: 10, TotalCount: 0, TotalPages: 0, Filtered: false };
     this.getTeams();
   }
 
@@ -53,6 +53,12 @@ export class TeamListComponent {
       this.spfInputs.PageIndex = page.newPage;
       this.getTeams();
       console.log("changed page: " + page.newPage);
+  }
+
+  onFiltered(filterText: string) {
+    this.spfInputs.Filter = filterText;
+    this.spfInputs.PageIndex = 0;
+    this.getTeams();
   }
 
   getTeams() {

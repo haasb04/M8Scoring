@@ -25,9 +25,15 @@ namespace M8Scoring.Controllers {
 
 		[HttpGet("QS/{term}")]
 		public IActionResult QS(string term) {
-			string[] values = { "There", "Once", "Was", "Mouse" };
+			int termAsInt = 0;
+			int.TryParse(term, out termAsInt);
 
-			return new JsonResult(values, new JsonSerializerSettings() { Formatting = Formatting.Indented });
+			var list = mDbContext.Teams
+				.Where(t => t.Name.Contains(term) || t.Number == termAsInt)
+				.Take(10)
+				.Select(t => t.Name);
+
+			return new JsonResult(list, new JsonSerializerSettings() { Formatting = Formatting.Indented });
 		}
 
 		// GET: api/<controller>

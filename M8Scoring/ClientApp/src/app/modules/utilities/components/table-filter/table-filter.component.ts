@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 import { HttpClient, HttpUrlEncodingCodec } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable, pipe } from 'rxjs';
@@ -13,12 +13,13 @@ import { fromEvent } from 'rxjs/observable/fromEvent';
   templateUrl: './table-filter.component.html',
   styleUrls: ['./table-filter.component.css']
 })
-export class TableFilterComponent implements OnInit, AfterViewInit {
+export class TableFilterComponent implements AfterViewInit{
   results: string[];
   activeIdx: number;
   filterText = '';
+  filterApplied: boolean;
   searchBox: HTMLElement;
-  typeahead$: Observable<{}>;
+  typeahead$: Observable<string[]>;
 
   constructor(private mEref: ElementRef, private http: HttpClient) {
     this.results = new Array<string>();
@@ -28,23 +29,22 @@ export class TableFilterComponent implements OnInit, AfterViewInit {
   @Input() quickSearchUrl: string;
   @Output() filtered = new EventEmitter();
 
-  ngOnInit() { }
-
   ngAfterViewInit() {
     this.searchBox = document.getElementById('search-box');
     this.typeahead$ = fromEvent(this.searchBox, 'input').pipe(
-      map((e: KeyboardEvent) => e.target.value),
+      map((e: any) => e.target.value),
       filter(text => text.length > 2),
-      filter(text => text.length < 5),
+      filter(text => text.length < 20),
       debounceTime(1000),
       distinctUntilChanged(),
-      switchMap((text:string) => this.http.get(this.quickSearchUrl + '/' + encodeURIComponent(text)))
+      switchMap((text:string) => this.http.get<string[]>(this.quickSearchUrl + '/' + encodeURIComponent(text)))
     );
 
     this.typeahead$.subscribe(data => {
-      console.log(data);
-      //Console.log("searching quicksearch..");
-      let i = 1;
+      if (!this.filterApplied) {
+        this.clearList();
+        this.results = data;
+      }
     }, err => console.log(err))
   }
 
@@ -61,7 +61,16 @@ export class TableFilterComponent implements OnInit, AfterViewInit {
     }
   }
 
+  clearFilter() {
+    this.filterText = "";
+    this.filterApplied = false;
+    this.filtered.emit(this.filterText);
+  }
+
   onFilter() {
+    this.filtered.emit(this.filterText);
+    this.filterApplied = true;
+    this.clearList();
     console.log("onFilter...");
   }
 
@@ -90,13 +99,7 @@ export class TableFilterComponent implements OnInit, AfterViewInit {
         return;
       }
     }
-
-    this.search();
-    //this.results.push("test" + this.results.length + 1);
-  }
-
-  search() {
-
+    this.filterApplied = false;
   }
 
   clearList() {
