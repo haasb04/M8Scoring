@@ -6,3 +6,7 @@ ul.teams li{
 ul.teams li.selected{
   background-color: #cccccc;
 }
+
+.clickable-row{
+  cursor: pointer;
+}

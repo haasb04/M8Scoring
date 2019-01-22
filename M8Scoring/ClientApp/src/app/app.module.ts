@@ -13,6 +13,8 @@ import { MatchModule } from './modules/match/match.module';
 import { TeamListComponent } from './components/team-list/team-list.component';
 
 import { UtilitiesModule } from './modules/utilities/utitlies.module';
+import { TeamEditComponent } from './components/team-edit/team-edit.component';
+import { TeamComponent } from './components/team/team.component';
 
 @NgModule({
   declarations: [
@@ -21,17 +23,23 @@ import { UtilitiesModule } from './modules/utilities/utitlies.module';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    TeamListComponent
+    TeamListComponent,
+    TeamEditComponent,
+    TeamComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch:'full' },
+      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'home', component: HomeComponent },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'match', loadChildren: './modules/match/match.module#MatchModule'},
+      { path: 'match', loadChildren: './modules/match/match.module#MatchModule' },
+      { path: 'team/create', component: TeamEditComponent },
+      { path: 'team/edit/:id', component: TeamEditComponent },
+      { path: 'team/:id', component: TeamComponent}
     ]),
     MatchModule,
     UtilitiesModule

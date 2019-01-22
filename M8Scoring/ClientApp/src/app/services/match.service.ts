@@ -38,13 +38,13 @@ export class MatchService {
     opponent.Name = "Wolf Pack";
 
     var opponentList: Player[] = [
-      { Id: 1, Number: 33739, Name: 'McEathron, Darren', Rate: 73 },
-      { Id: 2, Number: 8978, Name: 'Kamman, Brian', Rate: 44 },
-      { Id: 3, Number: 11041, Name: 'Souba, Todd', Rate: 96 },
-      { Id: 4, Number: 14305, Name: 'Samson, James', Rate: 46 },
-      { Id: 5, Number: 18985, Name: 'Dave, Krutz', Rate: 82 },
-      { Id: 6, Number: 34331, Name: 'Matlock, Christopher', Rate: 54 },
-      { Id: 7, Number: 38208, Name: 'Valenzuela, Joe', Rate: 63 }
+      <Player>{ Id: 1, Number: 33739, FirstName: 'McEathron, Darren', Rate: 73 },
+      <Player>{ Id: 2, Number: 8978, FirstName: 'Kamman, Brian', Rate: 44 },
+      <Player>{ Id: 3, Number: 11041, FirstName: 'Souba, Todd', Rate: 96 },
+      <Player>{ Id: 4, Number: 14305, FirstName: 'Samson, James', Rate: 46 },
+      <Player>{ Id: 5, Number: 18985, FirstName: 'Dave, Krutz', Rate: 82 },
+      <Player>{ Id: 6, Number: 34331, FirstName: 'Matlock, Christopher', Rate: 54 },
+      <Player>{ Id: 7, Number: 38208, FirstName: 'Valenzuela, Joe', Rate: 63 }
     ];
     opponent.Players = opponentList;
     this.match.Opponent = opponent;
@@ -55,13 +55,13 @@ export class MatchService {
     myTeam.Name = "Holy Rollers";
 
     var myList: Player[] = [
-      { Id: 8, Number: 35560, Name: 'Williams, Chase', Rate: 54 },
-      { Id: 9, Number: 14798, Name: 'Forar, Brandon', Rate: 98 },
-      { Id: 10, Number: 23704, Name: 'Hebig, Travis', Rate: 49 },
-      { Id: 11, Number: 35697, Name: 'Gregerson, Brian', Rate: 68 },
-      { Id: 12, Number: 37377, Name: 'Haas, Brian', Rate: 55 },
-      { Id: 13, Number: 37378, Name: 'Wolf, Cory', Rate: 72 },
-      { Id: 14, Number: 37770, Name: 'Forar, Nick', Rate: 64 }
+      <Player>{ Id: 8, Number: 35560, FirstName: 'Williams, Chase', Rate: 54 },
+      <Player>{ Id: 9, Number: 14798, FirstName: 'Forar, Brandon', Rate: 98 },
+      <Player>{ Id: 10, Number: 23704, FirstName: 'Hebig, Travis', Rate: 49 },
+      <Player>{ Id: 11, Number: 35697, FirstName: 'Gregerson, Brian', Rate: 68 },
+      <Player>{ Id: 12, Number: 37377, FirstName: 'Haas, Brian', Rate: 55 },
+      <Player>{ Id: 13, Number: 37378, FirstName: 'Wolf, Cory', Rate: 72 },
+      <Player>{ Id: 14, Number: 37770, FirstName: 'Forar, Nick', Rate: 64 }
     ];
     myTeam.Players = myList;
     this.match.Team = myTeam;

@@ -1,12 +1,10 @@
-<h1>Time: {{ time | async }}</h1>
-
 <h2>{{title}}</h2>
   
   <div class="col-lg-4 col-md-4 col-sm-4 pull-right">
     <table-filter placeholder="Search Teams" quickSearchUrl="api/Team/QS" (filtered)="onFiltered($event)"></table-filter>
   </div>
 
-<table class="table" sortable-table (sorted)="onSorted($event)">
+<table class="table table-hover" sortable-table (sorted)="onSorted($event)">
   <thead>
     <tr>
       <th sortable-column="Id">Id</th>
@@ -15,7 +13,7 @@
     </tr>
   </thead>
   <tbody> 
-    <tr *ngFor="let team of teams">
+    <tr class="clickable-row" *ngFor="let team of teams" [class.selected]="team === selectedTeam" (click)="onSelect(team)">
       <td>{{team.Id}}</td>
       <td>{{team.Number}}</td>
       <td>{{team.Name}}</td>

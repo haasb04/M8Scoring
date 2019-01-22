@@ -1,0 +1,18 @@
+<h2>{{title}}</h2>
+<div class="team-edit">
+  <div>
+    <label for="name">Team Name:</label>
+    <br/>
+    <input type="text" id="name" [(ngModel)]="team.Name" placeholder="choose a name..." />
+  </div>
+  <div>
+    <label for="number">Team Number:</label>
+    <br/>
+    <input type="text" id="number" [(ngModel)]="team.Number" placeholder="choose a number..."/>
+  </div>
+  <div>
+    <input *ngIf="editMode" type="button" value="Apply Changes" (click)="onSubmit(team)"/>
+    <input *ngIf="!editMode" type="button" value="Create Team" (click)="onSubmit(team)"/>
+    <input type="button" value="Cancel" (click)="onBack()" />
+  </div>
+</div>

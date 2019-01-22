@@ -90,7 +90,7 @@ export class TableFilterComponent implements AfterViewInit{
       }
       return;
     } else if (event.key == "Enter") {
-      if (this.activeIdx > 0 && this.results.length > this.activeIdx) {
+      if (this.activeIdx >= 0 && this.results.length > this.activeIdx) {
         this.filterText = this.results[this.activeIdx];
         this.clearList();
         return;

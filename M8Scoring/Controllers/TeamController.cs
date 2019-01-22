@@ -6,6 +6,7 @@ using M8Scoring.Data;
 using M8Scoring.ViewModels;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -23,6 +24,7 @@ namespace M8Scoring.Controllers {
 		}
 		#endregion
 
+		#region QuickSearch
 		[HttpGet("QS/{term}")]
 		public IActionResult QS(string term) {
 			int termAsInt = 0;
@@ -35,6 +37,8 @@ namespace M8Scoring.Controllers {
 
 			return new JsonResult(list, new JsonSerializerSettings() { Formatting = Formatting.Indented });
 		}
+
+		#endregion
 
 		// GET: api/<controller>
 		[HttpGet("all/{num}")]
@@ -59,25 +63,103 @@ namespace M8Scoring.Controllers {
 			return new JsonResult(viewModel, new JsonSerializerSettings() { Formatting = Formatting.Indented });
 		}
 
-		//// GET api/<controller>/5
-		//[HttpGet("{id}")]
-		//public string Get(int id) {
-		//	return "value";
-		//}
+		#region RESTful convention methods
 
-		//// POST api/<controller>
-		//[HttpPost]
-		//public void Post([FromBody]string value) {
-		//}
+		// GET api/<controller>/5
+		[HttpGet("{id}")]
+		public IActionResult Get(int id) {
 
-		//// PUT api/<controller>/5
-		//[HttpPut("{id}")]
-		//public void Put(int id, [FromBody]string value) {
-		//}
+			var team = mDbContext.Teams
+								.Include(t => t.TeamPlayers)
+								 .ThenInclude(tp => tp.Player)
+								.Where(i => i.Id == id).FirstOrDefault();
 
-		//// DELETE api/<controller>/5
-		//[HttpDelete("{id}")]
-		//public void Delete(int id) {
-		//}
+			if(team == null) {
+				return NotFound(new { Error = string.Format("Team {0} was not found.", id) });
+			}
+
+			TeamViewModel vm = team.Adapt<TeamViewModel>();
+			
+			//players
+			List<PlayerViewModel> players = new List<PlayerViewModel>();
+			foreach(TeamPlayer tp in team.TeamPlayers) {
+				players.Add(tp.Player.Adapt<PlayerViewModel>());
+			}
+
+			vm.Players = players.ToArray();
+
+			return new JsonResult(vm, new JsonSerializerSettings() { Formatting = Formatting.Indented });
+		}
+
+		/// <summary>
+		/// Adds a new Team to the database
+		/// </summary>
+		/// <param name="model">The TeamViewModel containing the new team information.</param>
+		/// <param name="value"></param>
+		[HttpPut]
+		public IActionResult Put([FromBody]TeamViewModel model) {
+			if(model == null) {
+				return new StatusCodeResult(500);
+			}
+
+			var team = new Team();
+
+			//properties taken from the request
+			team.Number = model.Number;
+			team.Name = model.Name;
+			team.CreatedDate = DateTime.Now;
+			team.LastModifiedDate = team.CreatedDate;
+
+			//team owner???
+			mDbContext.Teams.Add(team);
+			mDbContext.SaveChanges();
+
+			return new JsonResult(team.Adapt<TeamViewModel>(), new JsonSerializerSettings() { Formatting = Formatting.Indented });
+		}
+
+		/// <summary>
+		/// Edit the team with the given id
+		/// </summary>
+		/// <param name="model">The TeamViewModel</param>
+		[HttpPost]
+		public IActionResult Post([FromBody]TeamViewModel model) {
+			if(model == null) {
+				return new StatusCodeResult(500);
+			}
+
+			var team = mDbContext.Teams.Where(t => t.Id == model.Id).FirstOrDefault();
+
+			if(team == null) {
+				return NotFound(new { Error = string.Format("Team ID {0} was not found.", model.Id) });
+			}
+
+			//hand the update
+			team.Name = model.Name;
+			team.Number = model.Number;
+
+			team.LastModifiedDate = DateTime.Now;
+			mDbContext.SaveChanges();
+
+			return new JsonResult(team.Adapt<TeamViewModel>(), new JsonSerializerSettings() { Formatting = Formatting.Indented });
+		}
+
+		/// <summary>
+		/// Deletes the Team with the given id.
+		/// </summary>
+		/// <param name="id">The id of the team to delete.</param>
+		[HttpDelete("{id}")]
+		public IActionResult Delete(int id) {
+			var team = mDbContext.Teams.Where(t => t.Id == id).FirstOrDefault();
+
+			if(team == null) {
+				return NotFound(new { Error = string.Format("Team {0} was not found.", id)});
+			}
+
+			mDbContext.Teams.Remove(team);
+			mDbContext.SaveChanges();
+
+			return new OkResult();
+		}
+		#endregion
 	}
 }

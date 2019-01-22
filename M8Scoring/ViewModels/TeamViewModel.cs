@@ -17,6 +17,7 @@ namespace M8Scoring.ViewModels {
 		public int Number { get; set; }
 		public DateTime LastModifiedDate { get; set; }
 		public DateTime CreatedDate { get; set; }
+		public PlayerViewModel[] Players { get; set; }
 		#endregion
 	}
 }
