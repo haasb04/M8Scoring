@@ -1,6 +1,9 @@
 <h2>{{title}}</h2>
 <div>{{team.Name}}</div>
 <div>
+  <player-list [players]="team.Players"></player-list>
+</div>
+<div>
   <input type="button" value="Edit" (click)="onEdit()" />
   <input type="button" value="Delete" (click)="onDelete()"/>
 </div>

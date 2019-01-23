@@ -29,6 +29,7 @@ export class TeamComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.team = <Team>{};
   }
 
   onEdit() {

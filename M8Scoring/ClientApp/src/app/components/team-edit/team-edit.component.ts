@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 export class TeamEditComponent implements OnInit {
   title: string;
   team: Team;
+  selectedPlayer: Player;
 
   editMode: boolean;
 
@@ -36,6 +37,10 @@ export class TeamEditComponent implements OnInit {
       this.editMode = false;
       this.title = "Create new Team";
     }
+  }
+
+  onPlayerSelected(player: Player) {
+    this.selectedPlayer = player;
   }
 
   onSubmit(team: Team) {

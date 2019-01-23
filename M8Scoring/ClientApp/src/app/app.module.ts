@@ -15,6 +15,8 @@ import { TeamListComponent } from './components/team-list/team-list.component';
 import { UtilitiesModule } from './modules/utilities/utitlies.module';
 import { TeamEditComponent } from './components/team-edit/team-edit.component';
 import { TeamComponent } from './components/team/team.component';
+import { PlayerListComponent } from './components/player-list/player-list.component';
+import { PlayerEditComponent } from './components/player-edit/player-edit.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { TeamComponent } from './components/team/team.component';
     FetchDataComponent,
     TeamListComponent,
     TeamEditComponent,
-    TeamComponent
+    TeamComponent,
+    PlayerListComponent,
+    PlayerEditComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

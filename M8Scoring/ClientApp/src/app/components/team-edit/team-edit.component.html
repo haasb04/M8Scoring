@@ -10,6 +10,13 @@
     <br/>
     <input type="text" id="number" [(ngModel)]="team.Number" placeholder="choose a number..."/>
   </div>
+  <h3>Players</h3>
+  <div>
+    <player-list id="playerList" [players]="team.Players" (selectedPlayer)="onPlayerSelected($event)"></player-list>
+  </div>
+  <div>
+    <player-edit *ngIf="selectedPlayer" [player]="selectedPlayer"></player-edit>
+  </div>
   <div>
     <input *ngIf="editMode" type="button" value="Apply Changes" (click)="onSubmit(team)"/>
     <input *ngIf="!editMode" type="button" value="Create Team" (click)="onSubmit(team)"/>
