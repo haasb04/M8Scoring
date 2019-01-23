@@ -43,6 +43,10 @@ export class TeamEditComponent implements OnInit {
     this.selectedPlayer = player;
   }
 
+  editPlayer(player: Player) {
+    this.router.navigate(["player/edit", player.Id]);
+  }
+
   onSubmit(team: Team) {
     var url = this.baseUrl + "api/team";
 

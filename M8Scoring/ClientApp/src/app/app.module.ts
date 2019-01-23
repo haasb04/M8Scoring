@@ -17,6 +17,7 @@ import { TeamEditComponent } from './components/team-edit/team-edit.component';
 import { TeamComponent } from './components/team/team.component';
 import { PlayerListComponent } from './components/player-list/player-list.component';
 import { PlayerEditComponent } from './components/player-edit/player-edit.component';
+import { PlayerComponent } from './components/player/player.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { PlayerEditComponent } from './components/player-edit/player-edit.compon
     TeamEditComponent,
     TeamComponent,
     PlayerListComponent,
-    PlayerEditComponent
+    PlayerEditComponent,
+    PlayerComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -43,7 +45,10 @@ import { PlayerEditComponent } from './components/player-edit/player-edit.compon
       { path: 'match', loadChildren: './modules/match/match.module#MatchModule' },
       { path: 'team/create', component: TeamEditComponent },
       { path: 'team/edit/:id', component: TeamEditComponent },
-      { path: 'team/:id', component: TeamComponent}
+      { path: 'team/:id', component: TeamComponent },
+      { path: 'player/create', component: PlayerEditComponent },
+      { path: 'player/edit/:id', component: PlayerEditComponent },
+      { path: 'player/:id', component: PlayerComponent }
     ]),
     MatchModule,
     UtilitiesModule

@@ -1,22 +1,35 @@
+<h2>{{title}}</h2>
 <div class="player-edit">
-  <div>
-    <label for="number">Number</label>
-    <br />
-    <input type="text" id="number" [(ngModel)]="player.Number" />
-  </div>
-  <div>
-    <label for="firstName">First Name</label>
-    <br />
-    <input type="text" id="firstName" [(ngModel)]="player.FirstName" />
-  </div>
-  <div>
-    <label for="lastName">Last Name</label>
-    <br />
-    <input type="text" id="lastName" [(ngModel)]="player.LastName" />
-  </div>
-  <div>
-    <label for="rating">Rating</label>
-    <br />
-    <input type="number" id="rating" [(ngModel)]="player.Rating" />
-  </div>
+  <form #playerForm="ngForm" (ngSubmit)="onSubmit(player)">
+    <div>
+      <label for="number">Number</label>
+      <br />
+      <input class="form-control" type="text" id="number" name="number" [(ngModel)]="player.Number" #number="ngModel" required />
+      <div *ngIf="number.invalid && (number.dirty || number.touched)" class="alert alert-danger">
+        <div *ngIf="number.errors.required">
+          Number is required
+        </div>
+      </div>
+    </div>
+    <div>
+      <label for="firstName">First Name</label>
+      <br />
+      <input type="text" id="firstName" [(ngModel)]="player.FirstName" name="firstName" #firstName="ngModel" required />
+      <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="alart alert-danger">
+        First Name is required
+      </div>
+    </div>
+    <div>
+      <label for="lastName">Last Name</label>
+      <br />
+      <input type="text" id="lastName" [(ngModel)]="player.LastName" name="lastName" />
+    </div>
+    <div>
+      <label for="rating">Rating</label>
+      <br />
+      <input type="number" id="rating" [(ngModel)]="player.Rating" name="rating" />
+    </div>
+    <button type="submit" class="btn btn-success" [disabled]="!playerForm.form.valid">Submit</button>
+    <button type="button" class="btn btn-cancel" (click)="onBack()">Cancel</button> 
+  </form>
 </div>
