@@ -127,17 +127,47 @@ namespace M8Scoring.Controllers {
 				return new StatusCodeResult(500);
 			}
 
-			var team = mDbContext.Teams.Where(t => t.Id == model.Id).FirstOrDefault();
+			var team = mDbContext.Teams
+				.Include(t => t.TeamPlayers)
+				.Where(t => t.Id == model.Id).FirstOrDefault();
 
 			if(team == null) {
 				return NotFound(new { Error = string.Format("Team ID {0} was not found.", model.Id) });
 			}
 
-			//hand the update
+			//handle the update
 			team.Name = model.Name;
 			team.Number = model.Number;
 
 			team.LastModifiedDate = DateTime.Now;
+
+			foreach(PlayerViewModel pvm in model.Players) {
+				//look for added players
+				TeamPlayer tp = team.TeamPlayers.Where(p => p.PlayerId == pvm.Id).FirstOrDefault();
+
+				if(tp == null) {
+					//add it
+					TeamPlayer playerToAdd = new TeamPlayer();
+					playerToAdd.TeamId = team.Id;
+					playerToAdd.PlayerId = pvm.Id;
+					team.TeamPlayers.Add(playerToAdd);
+				}
+			}
+
+			List<TeamPlayer> playersToRemove = new List<TeamPlayer>();
+			foreach(TeamPlayer p in team.TeamPlayers) {
+				//look for player in pvm
+				PlayerViewModel pvm = model.Players.Where(tp => tp.Id == p.PlayerId).FirstOrDefault();
+				if(pvm == null) {
+					//player was removed
+					playersToRemove.Add(p);
+				}
+			}
+
+			foreach(TeamPlayer p in playersToRemove) {
+				team.TeamPlayers.Remove(p);
+			}
+			
 			mDbContext.SaveChanges();
 
 			return new JsonResult(team.Adapt<TeamViewModel>(), new JsonSerializerSettings() { Formatting = Formatting.Indented });

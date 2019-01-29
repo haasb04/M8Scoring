@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { ParamMap } from '@angular/router';
 
 @Component({
   selector: 'table-paging',
@@ -32,6 +33,13 @@ export class TablePagingComponent implements OnInit {
     if (this.spfData.PageIndex + 1 < this.spfData.TotalPages) {
       this.pageChanged.emit({ oldPage: this.spfData.PageIndex, newPage: this.spfData.PageIndex + 1 });
     }
+  }
+
+  static spfToMatrix(obj: ListSpfInput, param: ParamMap) {
+      obj.Filter = param.get('Filter');
+      obj.PageIndex = +param.get('PageIndex');
+      obj.SortCol = param.get("SortCol");
+      obj.SortOrder = (param.get("SortOrder") == "true")
   }
 }
 

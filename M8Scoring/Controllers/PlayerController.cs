@@ -22,6 +22,24 @@ namespace M8Scoring.Controllers {
 		}
 		#endregion
 
+		#region QuickSearch
+		[HttpGet("QS/{term}")]
+		public IActionResult QS(string term) {
+			int termAsInt = 0;
+			int.TryParse(term, out termAsInt);
+
+			var list = mDbContext.Players
+				.Where(t => t.FirstName.Contains(term) || t.LastName.Contains(term) || t.Number == termAsInt)
+				.Take(10)
+				.Select(t => t.LastName);
+
+			return new JsonResult(list, new JsonSerializerSettings() { Formatting = Formatting.Indented });
+		}
+
+		#endregion
+
+
+
 		[HttpGet("all")]
 		public IActionResult GetPlayers(string listSpfInput) {
 			if(string.IsNullOrEmpty(listSpfInput)) {

@@ -1,5 +1,5 @@
 <div class="input-group">
-  <input id="search-box" class="form-control" type="search" [(ngModel)]="filterText" placeholder="{{placeholder}}" (keydown)="onKeyDown($event)" />
+  <input id="search-box" class="form-control" type="text" autocomplete="off" [(ngModel)]="filterText" placeholder="{{placeholder}}" (keydown)="onKeyDown($event)" />
   
   <span class="input-group-btn">
     <button class="btn btn-primary" [class.disabled]="!filterApplied" (click)="clearFilter()"><i class="glyphicon glyphicon-filter"></i></button>
@@ -7,6 +7,6 @@
   </span>
 </div>
 <div class="list-group" *ngIf="results.length > 0">
-  <a href="#" class="list-group-item" *ngFor="let result of results; let idx = index"  [class.active]="idx == activeIdx" (click)="setFilter(idx)">{{result}}</a>
+  <a class="list-group-item" *ngFor="let result of results; let idx = index"  [class.active]="idx == activeIdx" (click)="setFilter(idx)">{{result}}</a>
 </div>
 

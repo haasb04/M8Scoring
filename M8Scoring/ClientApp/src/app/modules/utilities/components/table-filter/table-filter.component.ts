@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, AfterViewInit, OnInit } from '@angular/core';
 import { HttpClient, HttpUrlEncodingCodec } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable, pipe } from 'rxjs';
@@ -13,7 +13,7 @@ import { fromEvent } from 'rxjs/observable/fromEvent';
   templateUrl: './table-filter.component.html',
   styleUrls: ['./table-filter.component.css']
 })
-export class TableFilterComponent implements AfterViewInit{
+export class TableFilterComponent implements AfterViewInit, OnInit{
   results: string[];
   activeIdx: number;
   filterText = '';
@@ -27,7 +27,14 @@ export class TableFilterComponent implements AfterViewInit{
   }
   @Input() placeholder: string;
   @Input() quickSearchUrl: string;
+  @Input() initialFilterText: string;
+
   @Output() filtered = new EventEmitter();
+
+  ngOnInit() {
+    this.filterText = this.initialFilterText;
+    this.filterApplied = this.initialFilterText.length > 0;
+  }
 
   ngAfterViewInit() {
     this.searchBox = document.getElementById('search-box');

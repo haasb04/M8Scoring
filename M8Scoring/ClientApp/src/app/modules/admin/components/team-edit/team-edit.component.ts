@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
+import { Location } from "@angular/common";
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { TablePagingComponent } from '../../../utilities/components/table-paging/table-paging.component';
 
 @Component({
   selector: 'team-edit',
@@ -11,22 +13,26 @@ export class TeamEditComponent implements OnInit {
   title: string;
   team: Team;
   selectedPlayer: Player;
+  spfInput: ListSpfInput;
 
+  showPlayerPicker: boolean;
   editMode: boolean;
 
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(private route: ActivatedRoute,
     private router: Router,
     private http: HttpClient,
+    private location: Location,
     @Inject('BASE_URL') private baseUrl: string) {
 
     //create an empty Team object from Team interface
     this.team = <Team>{};
+    this.spfInput = <ListSpfInput>{};
 
-    var id = +this.activatedRoute.snapshot.params["id"];
+    var id = +this.route.snapshot.params["id"];
     if (id) {
       this.editMode = true;
 
-      //fetch the quiz from the server
+      //fetch the team from the server
       var url = this.baseUrl + "api/team/" + id;
       this.http.get<Team>(url).subscribe(
         res => {
@@ -44,7 +50,25 @@ export class TeamEditComponent implements OnInit {
   }
 
   editPlayer(player: Player) {
-    this.router.navigate(["player/edit", player.Id]);
+    //this.router.navigate(["player/edit", player.Id]);
+  }
+
+  addPlayer() {
+    this.showPlayerPicker = true;
+  }
+
+  onPlayerPicked(player: Player) {
+    if (player != null && this.team.Players.indexOf(player) < 0) {
+      this.team.Players.push(player);
+    }
+    this.showPlayerPicker = false;
+  }
+
+  removePlayer(player: Player) {
+    var index: number = this.team.Players.indexOf(player);
+    if (index > -1) {
+      this.team.Players.splice(index, 1);
+    }
   }
 
   onSubmit(team: Team) {
@@ -55,23 +79,23 @@ export class TeamEditComponent implements OnInit {
         .subscribe(res => {
           var v = res;
           console.log("Team " + v.Id + " has been updated.");
-          this.router.navigate(["home"]);
+          this.router.navigate(["admin/teams",this.spfInput]);
         }, error => console.log(error));
     } else {
       this.http.put<Team>(url, team)
         .subscribe(res => {
           var q = res;
           console.log("Team " + q.Id + " has been created.");
-          this.router.navigate(["home"]);
+          this.router.navigate(["admin/teams", this.spfInput]);
         }, error => console.log(error));
     }
   }
 
   onBack() {
-    this.router.navigate(["home"]);
+    this.location.back();
   }
 
   ngOnInit() {
+    this.route.paramMap.subscribe(param => TablePagingComponent.spfToMatrix(this.spfInput, param));
   }
-
 }

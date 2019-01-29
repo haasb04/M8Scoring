@@ -11,6 +11,8 @@
     <input type="text" id="number" [(ngModel)]="team.Number" placeholder="choose a number..."/>
   </div>
   <h3>Players</h3>
+  <div><Button class="btn" [class.disabled] ="team.Players != null && team.Players.length >=8" (click)="addPlayer()"><span class="glyphicon glyphicon-plus">Add Player</span></Button></div>
+  <div><player-picker [class.invisible]="!showPlayerPicker" (playerPicked)="onPlayerPicked($event)"></player-picker></div>
   <ul class="list-group">
     <li class="list-group-item" *ngFor="let player of team.Players">
       <div class="row">

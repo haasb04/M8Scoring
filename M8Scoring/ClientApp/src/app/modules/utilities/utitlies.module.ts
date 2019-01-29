@@ -7,6 +7,7 @@ import { TablePagingComponent } from './components/table-paging/table-paging.com
 import { SortService } from './services/sort.service';
 import { TableFilterComponent } from './components/table-filter/table-filter.component';
 import { FormsModule } from '@angular/forms';
+import { SpfBaseComponent } from './components/spf-base/spf-base.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { FormsModule } from '@angular/forms';
     SortableTableDirective,
     TablePagingComponent,
     SortableTableDirective,
-    TableFilterComponent
+    TableFilterComponent,
+    SpfBaseComponent
   ],
   imports: [
     CommonModule, FormsModule

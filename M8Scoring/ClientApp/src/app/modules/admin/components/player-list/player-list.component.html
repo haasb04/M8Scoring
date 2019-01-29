@@ -1,3 +1,9 @@
+<h2>{{title}}</h2>
+
+<div class="col-lg-4 col-md-4 col-sm-4 pull-right">
+  <table-filter placeholder="Search Players" quickSearchUrl="api/Player/QS" (filtered)="onFiltered($event)" initialFilterText="{{spfInputs.Filter}}"></table-filter>
+</div>
+
 <table class="table table-hover" sortable-table (sorted)="onSorted($event)">
   <thead>
     <tr>
@@ -13,6 +19,8 @@
       <td>{{player.FirstName}}</td>
       <td>{{player.LastName}}</td>
       <td>{{player.Rating}}</td>
-  </tr>
+    </tr>
   </tbody>
 </table>
+<table-paging totalPages="totalPages" [(spfData)]="spfOutputs" (pageChanged)="onPageChanged($event)"></table-paging>
+

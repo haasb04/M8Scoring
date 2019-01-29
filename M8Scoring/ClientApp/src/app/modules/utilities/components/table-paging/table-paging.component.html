@@ -1,9 +1,9 @@
 <nav>
   <ul class="pagination">
-    <li class="page-item" [class.disabled]="spfData.PageIndex == 0"><a class="page-link" (click)="onFirst()" href="#"><i class="glyphicon glyphicon-backward"></i></a></li>
-    <li class="page-item" [class.disabled]="!spfData.HasPreviousPage"><a class="page-link" (click)="onPrevious()" href="#"><i class="glyphicon glyphicon-chevron-left"></i></a></li>
-    <li class="page-item" [class.disabled]="!spfData.HasNextPage"><a class="page-link" (click)="onNext()" href="#"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
-    <li class="page-item" [class.disabled]="spfData.TotalPages - 1 == spfData.PageIndex" title="Goto Last Page"><a class="page-link" (click)="onLast()" href="#"><i class="glyphicon glyphicon-forward"></i></a></li>
+    <li class="page-item" [class.disabled]="spfData.PageIndex == 0"><a class="page-link" (click)="onFirst()"><i class="glyphicon glyphicon-backward"></i></a></li>
+    <li class="page-item" [class.disabled]="!spfData.HasPreviousPage"><a class="page-link" (click)="onPrevious()"><i class="glyphicon glyphicon-chevron-left"></i></a></li>
+    <li class="page-item" [class.disabled]="!spfData.HasNextPage"><a class="page-link" (click)="onNext()"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
+    <li class="page-item" [class.disabled]="spfData.TotalPages - 1 == spfData.PageIndex" title="Goto Last Page"><a class="page-link" (click)="onLast()" ><i class="glyphicon glyphicon-forward"></i></a></li>
     <li class="page-item" [class.disabled]="!spfData.Filtered"><span [class.invisible]="!spfData.Filtered"><i class="glyphicon glyphicon-filter"></i> Filtered</span></li>
   </ul>
 </nav>

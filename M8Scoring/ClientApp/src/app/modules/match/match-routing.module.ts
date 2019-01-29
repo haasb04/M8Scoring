@@ -3,13 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { MatchComponent } from './components/match/match.component';
 
-const routes: Routes = [
+const adminRoutes = [
   {path: 'match', component: MatchComponent}
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forChild(routes)],
+    RouterModule.forChild(adminRoutes)],
   exports: [RouterModule]
 })
 export class MatchRoutingModule { }

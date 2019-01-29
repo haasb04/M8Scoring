@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TablePagingComponent } from '../../../utilities/components/table-paging/table-paging.component';
 
 @Component({
   selector: 'app-team',
@@ -12,9 +13,12 @@ export class TeamComponent implements OnInit {
   team: Team;
   url: string;
 
-  constructor(private activatedRoute: ActivatedRoute, private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router:Router) {
+  //keep spfInputs for return to team list
+  spfInput: ListSpfInput = <ListSpfInput>{};
 
-    var id = +this.activatedRoute.snapshot.params["id"];
+  constructor(private route: ActivatedRoute, private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router:Router) {
+
+    var id = +this.route.snapshot.params["id"];
     if (id) {
       //fetch the Team
       var url = this.baseUrl + "api/team/" + id;
@@ -30,10 +34,16 @@ export class TeamComponent implements OnInit {
 
   ngOnInit() {
     this.team = <Team>{};
+
+    this.route.paramMap.subscribe(param => TablePagingComponent.spfToMatrix(this.spfInput, param));
   }
 
   onEdit() {
-    this.router.navigate(["team/edit", this.team.Id]);
+    this.router.navigate(["admin/team/edit/" + this.team.Id, this.spfInput]);
+  }
+
+  onBack() {
+    this.router.navigate(['./admin/teams', this.spfInput])
   }
 
   onDelete() {
