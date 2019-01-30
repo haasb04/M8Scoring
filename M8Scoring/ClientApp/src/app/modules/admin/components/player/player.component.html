@@ -1,0 +1,18 @@
+<h2>{{title}}</h2>
+<div>
+  {{player.Number}}<br/>
+  {{player.FirstName}} {{player.LastName}}<br/>
+  {{player.Rating}}
+</div>
+<h2>Teams</h2>
+<div>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let team of player.Teams">{{team.Name}}</li>
+  </ul>
+</div>
+
+<div>
+  <input type="button" value="Edit" (click)="onEdit()" />
+  <input type="button" value="Back" (click)="onBack()" />
+</div>
+

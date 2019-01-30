@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from "@angular/common";
+
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -13,7 +15,7 @@ export class PlayerEditComponent implements OnInit {
 
   editMode: boolean;
 
-  constructor(private activateRoute: ActivatedRoute,
+  constructor(private location: Location, private activateRoute: ActivatedRoute,
     private router: Router,
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string) {
@@ -44,20 +46,20 @@ export class PlayerEditComponent implements OnInit {
         res => {
           var v = res;
           console.log("Player " + v.Id + " has been updated.");
-          this.router.navigate(["home"]);
+          this.location.back();
         }, error => console.log(error));
     } else {
       this.http.put<Player>(url, player)
         .subscribe(res => {
           var q = res;
           console.log("Player " + q.Id + " has been created.");
-          this.router.navigate(["home"]);
+          this.location.back();
         }, error => console.log(error));
     }
   }
 
   onBack() {
-    this.router.navigate(["home"]);
+    this.location.back();
   }
 
   ngOnInit() {

@@ -11,6 +11,8 @@ import { PlayerListComponent } from './components/player-list/player-list.compon
 import { TeamComponent } from './components/team/team.component';
 import { TeamEditComponent } from './components/team-edit/team-edit.component';
 import { PlayerPickerComponent } from './components/player-picker/player-picker.component';
+import { PlayerEditComponent } from './components/player-edit/player-edit.component';
+import { PlayerComponent } from './components/player/player.component';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { PlayerPickerComponent } from './components/player-picker/player-picker.
     TeamComponent,
     TeamEditComponent,
     PlayerListComponent,
-    PlayerPickerComponent
+    PlayerComponent,
+    PlayerPickerComponent,
+    PlayerEditComponent
   ]
 })
 export class AdminModule { }

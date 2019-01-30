@@ -25,7 +25,7 @@ export class TeamEditComponent implements OnInit {
     @Inject('BASE_URL') private baseUrl: string) {
 
     //create an empty Team object from Team interface
-    this.team = <Team>{};
+    this.team = <Team>{Players: new Array<Player>() };
     this.spfInput = <ListSpfInput>{};
 
     var id = +this.route.snapshot.params["id"];
@@ -50,7 +50,7 @@ export class TeamEditComponent implements OnInit {
   }
 
   editPlayer(player: Player) {
-    //this.router.navigate(["player/edit", player.Id]);
+    this.router.navigate(["admin/player/edit/" + player.Id, this.spfInput]);
   }
 
   addPlayer() {

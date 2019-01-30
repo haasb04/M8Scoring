@@ -68,7 +68,7 @@ namespace M8Scoring.Controllers {
 		// GET api/<controller>/5
 		[HttpGet("{id}")]
 		public IActionResult Get(int id) {
-
+			
 			var team = mDbContext.Teams
 								.Include(t => t.TeamPlayers)
 								 .ThenInclude(tp => tp.Player)
@@ -109,8 +109,14 @@ namespace M8Scoring.Controllers {
 			team.Name = model.Name;
 			team.CreatedDate = DateTime.Now;
 			team.LastModifiedDate = team.CreatedDate;
-
 			//team owner???
+
+			//players
+			foreach(PlayerViewModel pvm in model.Players) {
+				team.TeamPlayers.Add(new TeamPlayer() { TeamId = team.Id, PlayerId = pvm.Id });
+			}
+
+
 			mDbContext.Teams.Add(team);
 			mDbContext.SaveChanges();
 
@@ -154,16 +160,8 @@ namespace M8Scoring.Controllers {
 				}
 			}
 
-			List<TeamPlayer> playersToRemove = new List<TeamPlayer>();
-			foreach(TeamPlayer p in team.TeamPlayers) {
-				//look for player in pvm
-				PlayerViewModel pvm = model.Players.Where(tp => tp.Id == p.PlayerId).FirstOrDefault();
-				if(pvm == null) {
-					//player was removed
-					playersToRemove.Add(p);
-				}
-			}
-
+			List<TeamPlayer> playersToRemove = team.TeamPlayers.Where(p => !model.Players.Any(mp => mp.Id == p.PlayerId)).ToList<TeamPlayer>();
+			
 			foreach(TeamPlayer p in playersToRemove) {
 				team.TeamPlayers.Remove(p);
 			}

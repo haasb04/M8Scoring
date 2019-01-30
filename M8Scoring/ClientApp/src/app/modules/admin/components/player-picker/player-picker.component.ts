@@ -22,7 +22,6 @@ export class PlayerPickerComponent implements OnInit, AfterViewInit {
   spfInputs: ListSpfInput;
 
   constructor(private mEref: ElementRef, private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
-    this.results = new Array<Player>();
     this.url = this.baseUrl + "api/player/all"
     this.spfInputs = <ListSpfInput>{ PageIndex: 0, SortCol: "Number", PageSize: 25 };
     this.activeIdx = -1;
@@ -31,6 +30,7 @@ export class PlayerPickerComponent implements OnInit, AfterViewInit {
   @Output() playerPicked:EventEmitter<Player> = new EventEmitter<Player>();
 
   ngOnInit() {
+    this.results = new Array<Player>();
   }
 
   ngAfterViewInit() {
@@ -53,7 +53,7 @@ export class PlayerPickerComponent implements OnInit, AfterViewInit {
   }
 
   onOutsideClick(event) {
-    if(this.searchText.length > 0 && !this.mEref.nativeElement.contains(event.target)) {
+    if(this.searchText && this.searchText.length > 0 && !this.mEref.nativeElement.contains(event.target)) {
       this.playerPicked.emit(null);
       this.clearControl();
     }

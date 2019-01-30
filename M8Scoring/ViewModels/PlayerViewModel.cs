@@ -19,6 +19,7 @@ namespace M8Scoring.ViewModels {
 		public int Rating { get; set; }
 		public DateTime CreatedDate { get; set; }
 		public DateTime LastModifiedDate { get; set; }
+		public TeamViewModel[] Teams { get; set; }
 		#endregion
 	}
 }

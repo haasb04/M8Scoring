@@ -31,6 +31,9 @@ export class PlayerListComponent extends SpfBaseComponent {
       }, error => console.error(error));
   }
 
+  addNewPlayer() {
+    this.router.navigate(["admin/player/create", this.spfInputs]);
+  }
   //onSorted(column: ColumnSortedEvent) {
 
 
@@ -62,6 +65,6 @@ export class PlayerListComponent extends SpfBaseComponent {
   onSelect(player: Player) {
     this.selectedPlayer = player;
     console.log("player with Id " + this.selectedPlayer.Id + " has been selected.");
-    this.router.navigate(["player/" + this.selectedPlayer.Id, this.spfInputs]);
+    this.router.navigate(["admin/player/" + this.selectedPlayer.Id, this.spfInputs]);
   }
 }

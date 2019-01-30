@@ -6,6 +6,7 @@ using M8Scoring.Data;
 using M8Scoring.ViewModels;
 using Mapster;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -57,6 +58,8 @@ namespace M8Scoring.Controllers {
 		public IActionResult Get(int id) {
 
 			var player = mDbContext.Players
+								.Include(p => p.TeamPlayers)
+								.ThenInclude(tp => tp.Team)
 								.Where(i => i.Id == id).FirstOrDefault();
 
 			if(player == null) {
@@ -65,13 +68,13 @@ namespace M8Scoring.Controllers {
 
 			PlayerViewModel vm = player.Adapt<PlayerViewModel>();
 
-			////teams
-			//List<TeamViewModel> teams = new List<TeamViewModel>();
-			//foreach(TeamPlayer tp in player.TeamPlayers) {
-			//	teams.Add(tp.Team.Adapt<TeamViewModel>());
-			//}
+			//teams
+			List<TeamViewModel> teams = new List<TeamViewModel>();
+			foreach(TeamPlayer tp in player.TeamPlayers) {
+				teams.Add(tp.Team.Adapt<TeamViewModel>());
+			}
 
-			//vm.Teams = teams.ToArray();
+			vm.Teams = teams.ToArray();
 
 			return new JsonResult(vm, new JsonSerializerSettings() { Formatting = Formatting.Indented });
 		}
@@ -115,10 +118,10 @@ namespace M8Scoring.Controllers {
 			player.FirstName = model.FirstName;
 			player.LastName = model.LastName;
 			player.Number = model.Number;
+			player.Rating = model.Rating;
 
 			player.LastModifiedDate = DateTime.Now;
 			mDbContext.SaveChanges();
-
 			return new JsonResult(player.Adapt<PlayerViewModel>(), new JsonSerializerSettings() { Formatting = Formatting.Indented });
 		}
 

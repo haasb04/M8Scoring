@@ -28,6 +28,10 @@ export class TeamListComponent extends SpfBaseComponent {
     this.router.navigate(["admin/team/" + this.selectedTeam.Id, this.spfInputs]);
   }
 
+  addNewTeam() {
+    this.router.navigate(["admin/team/create", this.spfInputs]);
+  }
+
   getData() {
     this.http.get<TeamList>(this.url + 'all?listSpfInput=' + encodeURIComponent(JSON.stringify(this.spfInputs)))
       .subscribe(result => {

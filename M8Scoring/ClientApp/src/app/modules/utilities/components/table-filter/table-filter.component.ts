@@ -65,6 +65,7 @@ export class TableFilterComponent implements AfterViewInit, OnInit{
     if (this.results.length > idx) {
       this.filterText = this.results[idx];
       this.clearList();
+      this.searchBox.focus();
     }
   }
 

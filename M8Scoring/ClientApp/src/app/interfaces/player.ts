@@ -5,4 +5,5 @@ interface Player {
   LastName: string;
   Rating: number;
   Rate: number;
+  Teams: Team[];
 }
