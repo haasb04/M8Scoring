@@ -49,6 +49,7 @@
     <None Remove="ClientApp\src\app\interfaces\playerList.ts" />
     <None Remove="ClientApp\src\app\interfaces\team.ts" />
     <None Remove="ClientApp\src\app\interfaces\TeamList.ts" />
+    <None Remove="ClientApp\src\app\interfaces\token.ts" />
     <None Remove="ClientApp\src\app\modules\utilities\interfaces\ColumnSortedEvent.ts" />
     <None Remove="ClientApp\src\app\modules\utilities\interfaces\ListSpfInput.ts" />
     <None Remove="ClientApp\src\app\modules\utilities\interfaces\ListSpfOutput.ts" />
@@ -68,6 +69,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\playerList.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\team.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\teamList.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\token.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\modules\utilities\interfaces\ColumnSortedEvent.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\modules\utilities\interfaces\ListSpfInput.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\modules\utilities\interfaces\ListSpfOutput.ts" />

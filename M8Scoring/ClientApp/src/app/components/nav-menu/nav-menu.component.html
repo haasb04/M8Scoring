@@ -21,10 +21,20 @@
               <a [routerLink]='["/match"]' (click)='collapse()'>
                 <span class='glyphicon glyphicon-home'></span> Match
               </a>
-            </li>       
+            </li>
             <li [routerLinkActive]='["link-active"]'>
               <a [routerLink]='["admin"]'>
                 <span class='glyphicon glyphicon-wrench'></span> Admin
+              </a>
+            </li>
+            <li [routerLinkActive]="['link-active']">
+              <a [routerLink]="['/login']">
+                <span class='glyphicon glyphicon-log-in'></span> Login
+              </a>
+            </li>
+            <li>
+              <a (click)="logout()">
+                <span class='glyphicon glyphicon-log-out'></span> Logout
               </a>
             </li>
           </ul>
