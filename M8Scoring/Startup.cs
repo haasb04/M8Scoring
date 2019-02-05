@@ -1,4 +1,7 @@
+using System;
+using System.Text;
 using M8Scoring.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +10,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace M8Scoring {
 	public class Startup {
@@ -38,6 +42,33 @@ namespace M8Scoring {
 				})
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 
+			//Add Authentication with JWT Tokens
+			services.AddAuthentication(opts =>
+			{
+				opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+				opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			})
+			.AddJwtBearer(cfg =>
+			{
+				cfg.RequireHttpsMetadata = false;
+				cfg.SaveToken = true;
+				cfg.TokenValidationParameters = new TokenValidationParameters()
+				{
+					//standard configuration
+					ValidIssuer = Configuration["Auth:Jwt:Issuer"],
+					ValidAudience = Configuration["Auth:Jwt:Audience"],
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Auth:Jwt:Key"])),
+					ClockSkew = TimeSpan.Zero,
+
+					// security switches
+					RequireExpirationTime = true,
+					ValidateIssuer = true,
+					ValidateIssuerSigningKey = true,
+					ValidateAudience = true
+				};
+			});
+
 			// In production, the Angular files will be served from this directory
 			services.AddSpaStaticFiles(configuration =>
 			{
@@ -55,6 +86,9 @@ namespace M8Scoring {
 
 			app.UseStaticFiles();
 			app.UseSpaStaticFiles();
+
+			//Add the AuthenticationMiddleware to the pipeline
+			app.UseAuthentication();
 
 			app.UseMvc(routes =>
 			{

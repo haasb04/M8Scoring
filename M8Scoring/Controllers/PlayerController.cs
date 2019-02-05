@@ -9,17 +9,19 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace M8Scoring.Controllers {
 	[Route("api/[controller]")]
-	public class PlayerController : Controller {
+	public class PlayerController : BaseApiController {
 		#region Private Fields
-		private ApplicationDbContext mDbContext;
+
 		#endregion
 
 		#region Constructors
-		public PlayerController(ApplicationDbContext context) {
-			mDbContext = context;
+		public PlayerController(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, IConfiguration configuration):base(context, roleManager, userManager, configuration){
+			
 		}
 		#endregion
 
@@ -29,7 +31,7 @@ namespace M8Scoring.Controllers {
 			int termAsInt = 0;
 			int.TryParse(term, out termAsInt);
 
-			var list = mDbContext.Players
+			var list = DbContext.Players
 				.Where(t => t.FirstName.Contains(term) || t.LastName.Contains(term) || t.Number == termAsInt)
 				.Take(10)
 				.Select(t => t.LastName);
@@ -47,7 +49,7 @@ namespace M8Scoring.Controllers {
 				return StatusCode(500, new BadRequestObjectResult("No Inputs"));
 			}
 			PlayerListViewModel viewModel = new PlayerListViewModel(listSpfInput);
-			viewModel.PrepareData(mDbContext.Players);
+			viewModel.PrepareData(DbContext.Players);
 			//viewModel
 			//{ "PageSize":x, "TotalCount":x, "TotalPages":x, "PageIndex":x, "HasPreviousPage":true, "HasNextPage":false, "object[]":Data}
 			return new JsonResult(viewModel, new JsonSerializerSettings() { Formatting = Formatting.Indented });
@@ -57,7 +59,7 @@ namespace M8Scoring.Controllers {
 		[HttpGet("{id}")]
 		public IActionResult Get(int id) {
 
-			var player = mDbContext.Players
+			var player = DbContext.Players
 								.Include(p => p.TeamPlayers)
 								.ThenInclude(tp => tp.Team)
 								.Where(i => i.Id == id).FirstOrDefault();
@@ -95,8 +97,8 @@ namespace M8Scoring.Controllers {
 			player.LastModifiedDate = player.CreatedDate;
 
 			//player owner???
-			mDbContext.Players.Add(player);
-			mDbContext.SaveChanges();
+			DbContext.Players.Add(player);
+			DbContext.SaveChanges();
 
 			return new JsonResult(player.Adapt<PlayerViewModel>(), new JsonSerializerSettings() { Formatting = Formatting.Indented });
 		}
@@ -108,7 +110,7 @@ namespace M8Scoring.Controllers {
 				return new StatusCodeResult(500);
 			}
 
-			var player = mDbContext.Players.Where(t => t.Id == model.Id).FirstOrDefault();
+			var player = DbContext.Players.Where(t => t.Id == model.Id).FirstOrDefault();
 
 			if(player == null) {
 				return NotFound(new { Error = string.Format("player ID {0} was not found.", model.Id) });
@@ -121,20 +123,20 @@ namespace M8Scoring.Controllers {
 			player.Rating = model.Rating;
 
 			player.LastModifiedDate = DateTime.Now;
-			mDbContext.SaveChanges();
+			DbContext.SaveChanges();
 			return new JsonResult(player.Adapt<PlayerViewModel>(), new JsonSerializerSettings() { Formatting = Formatting.Indented });
 		}
 
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id) {
-			var player = mDbContext.Players.Where(t => t.Id == id).FirstOrDefault();
+			var player = DbContext.Players.Where(t => t.Id == id).FirstOrDefault();
 
 			if(player == null) {
 				return NotFound(new { Error = string.Format("Player {0} was not found.", id) });
 			}
 
-			mDbContext.Players.Remove(player);  //cascase delete????
-			mDbContext.SaveChanges();
+			DbContext.Players.Remove(player);  //cascase delete????
+			DbContext.SaveChanges();
 
 			return new OkResult();
 		}

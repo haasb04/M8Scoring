@@ -1,6 +1,8 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from "@angular/common";
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import 'rxjs/Rx';
 
 @Injectable()
 export class AuthService {
@@ -21,23 +23,25 @@ export class AuthService {
       scope: "offline_access profile email"
     };
 
-    return Observable.of(true); 
 
-    //return this.http.post<TokenResponse>(url, data)
-    //  .map((result) => {
-    //    let token = result && result.token;
-    //    //if the token is there, login has been successful
-    //    if (token) {
-    //      this.setAuth(result);
-    //      return true;
-    //    }
 
-    //    //failed login
-    //    return Observable.throw('Unauthorized');
-    //  })
-    //  .catch(error => {
-    //    return new Observable<any>(error);
-    //  });
+    //return Observable.of(true); 
+
+    return this.http.post<TokenResponse>(url, data)
+      .map((result) => {
+        let token = result && result.token;
+        //if the token is there, login has been successful
+        if (token) {
+          this.setAuth(result);
+          return true;
+        }
+
+        //failed login
+        return Observable.throw('Unauthorized');
+      })
+      .catch(error => {
+        return Observable.throw(error);// new Observable<any>(error);
+      });
   }
 
   logout(): boolean {
@@ -46,25 +50,31 @@ export class AuthService {
   }
 
   setAuth(auth: TokenResponse | null): boolean {
-    if (auth) {
-      localStorage.setItem(this.authKey, JSON.stringify(auth));
-    } else {
-      localStorage.removeItem(this.authKey);
+    if (isPlatformBrowser(this.platformId)) {
+      if (auth) {
+        localStorage.setItem(this.authKey, JSON.stringify(auth));
+      } else {
+        localStorage.removeItem(this.authKey);
+      }
     }
     return true;
   }
 
   getAuth(): TokenResponse | null {
-    var i = localStorage.getItem(this.authKey);
-    if (i) {
-      return JSON.parse(i);
-    } else {
-      return null;
+    if (isPlatformBrowser(this.platformId)) {
+      var i = localStorage.getItem(this.authKey);
+      if (i) {
+        return JSON.parse(i);
+      }
     }
+    return null;
   }
 
   isLoggedIn(): boolean {
-    //return localStorage.getItem(this.authKey) != null;
-    return true;
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem(this.authKey) != null;
+    }
+
+    return false;
   }
 }

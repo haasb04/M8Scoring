@@ -17,9 +17,6 @@ namespace M8Scoring.Data {
 		[ForeignKey("ApplicationUser")]
 		public string UserId { get; set; }
 
-		public DateTime CreatedDate { get; set; }
-		public DateTime LastModifiedDate { get; set; }
-
 		public ICollection<SubscriptionTeam> SubscriptionTeams { get; } = new List<SubscriptionTeam>();
 		#endregion
 

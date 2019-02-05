@@ -54,6 +54,18 @@ export class LoginComponent implements OnInit {
     return this.form.get(name);
   }
 
+  // returns TRUE if the FormControl is valid
+  isValid(name: string) {
+    var e = this.getFormControl(name);
+    return e && e.valid;
+  }
+
+  // returns TRUE if the FormControl has been changed
+  isChanged(name: string) {
+    var e = this.getFormControl(name);
+    return e && (e.dirty || e.touched);
+  }
+
   hasError(name: string) {
     var e = this.getFormControl(name);
     return e && (e.dirty || e.touched) && !e.valid;

@@ -5,22 +5,24 @@ using System.Threading.Tasks;
 using M8Scoring.Data;
 using M8Scoring.ViewModels;
 using Mapster;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace M8Scoring.Controllers {
 	[Route("api/[controller]")]
-	public class TeamController : Controller {
+	public class TeamController : BaseApiController {
 		#region Private Fields
-		private ApplicationDbContext mDbContext;
+		
 		#endregion
 
 		#region Constructors
-		public TeamController(ApplicationDbContext context) {
-			mDbContext = context;
+		public TeamController(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, IConfiguration configuration):base(context, roleManager, userManager, configuration) {
+
 		}
 		#endregion
 
@@ -30,7 +32,7 @@ namespace M8Scoring.Controllers {
 			int termAsInt = 0;
 			int.TryParse(term, out termAsInt);
 
-			var list = mDbContext.Teams
+			var list = DbContext.Teams
 				.Where(t => t.Name.Contains(term) || t.Number == termAsInt)
 				.Take(10)
 				.Select(t => t.Name);
@@ -43,7 +45,7 @@ namespace M8Scoring.Controllers {
 		// GET: api/<controller>
 		[HttpGet("all/{num}")]
 		public IActionResult All(int num = 10) {
-			var all = mDbContext.Teams
+			var all = DbContext.Teams
 			 .OrderByDescending(t => t.CreatedDate)
 			 .Take(num)
 			 .ToArray();
@@ -57,7 +59,7 @@ namespace M8Scoring.Controllers {
 				return StatusCode(500, new BadRequestObjectResult("No Inputs"));
 			}
 			TeamListViewModel viewModel = new TeamListViewModel(listSpfInput);
-			viewModel.PrepareData(mDbContext.Teams);
+			viewModel.PrepareData(DbContext.Teams);
 			//viewModel
 			//{ "PageSize":x, "TotalCount":x, "TotalPages":x, "PageIndex":x, "HasPreviousPage":true, "HasNextPage":false, "object[]":Data}
 			return new JsonResult(viewModel, new JsonSerializerSettings() { Formatting = Formatting.Indented });
@@ -69,7 +71,7 @@ namespace M8Scoring.Controllers {
 		[HttpGet("{id}")]
 		public IActionResult Get(int id) {
 			
-			var team = mDbContext.Teams
+			var team = DbContext.Teams
 								.Include(t => t.TeamPlayers)
 								 .ThenInclude(tp => tp.Player)
 								.Where(i => i.Id == id).FirstOrDefault();
@@ -117,8 +119,8 @@ namespace M8Scoring.Controllers {
 			}
 
 
-			mDbContext.Teams.Add(team);
-			mDbContext.SaveChanges();
+			DbContext.Teams.Add(team);
+			DbContext.SaveChanges();
 
 			return new JsonResult(team.Adapt<TeamViewModel>(), new JsonSerializerSettings() { Formatting = Formatting.Indented });
 		}
@@ -133,7 +135,7 @@ namespace M8Scoring.Controllers {
 				return new StatusCodeResult(500);
 			}
 
-			var team = mDbContext.Teams
+			var team = DbContext.Teams
 				.Include(t => t.TeamPlayers)
 				.Where(t => t.Id == model.Id).FirstOrDefault();
 
@@ -166,7 +168,7 @@ namespace M8Scoring.Controllers {
 				team.TeamPlayers.Remove(p);
 			}
 			
-			mDbContext.SaveChanges();
+			DbContext.SaveChanges();
 
 			return new JsonResult(team.Adapt<TeamViewModel>(), new JsonSerializerSettings() { Formatting = Formatting.Indented });
 		}
@@ -177,14 +179,14 @@ namespace M8Scoring.Controllers {
 		/// <param name="id">The id of the team to delete.</param>
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id) {
-			var team = mDbContext.Teams.Where(t => t.Id == id).FirstOrDefault();
+			var team = DbContext.Teams.Where(t => t.Id == id).FirstOrDefault();
 
 			if(team == null) {
 				return NotFound(new { Error = string.Format("Team {0} was not found.", id)});
 			}
 
-			mDbContext.Teams.Remove(team);
-			mDbContext.SaveChanges();
+			DbContext.Teams.Remove(team);
+			DbContext.SaveChanges();
 
 			return new OkResult();
 		}
