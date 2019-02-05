@@ -1,6 +1,7 @@
 using M8Scoring.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,18 @@ namespace M8Scoring {
 
 			//Add ApplicationDbContext
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+			//Add ASP.NET Identity support
+			services.AddIdentity<ApplicationUser, IdentityRole>(
+				opts =>
+				{
+					opts.Password.RequireDigit = true;
+					opts.Password.RequireLowercase = true;
+					opts.Password.RequireUppercase = true;
+					opts.Password.RequireNonAlphanumeric = false;
+					opts.Password.RequiredLength = 7;
+				})
+				.AddEntityFrameworkStores<ApplicationDbContext>();
 
 			// In production, the Angular files will be served from this directory
 			services.AddSpaStaticFiles(configuration =>
@@ -65,11 +78,15 @@ namespace M8Scoring {
 			//create a service scope to get an ApplicationDbContext isntance using DI
 			using(var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope()) {
 				var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+
+				var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+				var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+				
 				//create the db if it doesnt exits and applies and pending migration.
 				dbContext.Database.Migrate();
 
 				//Seed the db
-				DbSeeder.Seed(dbContext);
+				DbSeeder.Seed(dbContext, roleManager, userManager);
 			}
 		}
 	}
