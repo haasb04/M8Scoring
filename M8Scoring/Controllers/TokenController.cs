@@ -69,8 +69,9 @@ namespace M8Scoring.Controllers {
 										new Claim(JwtRegisteredClaimNames.Sub, user.Id),
 										new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 										new Claim(JwtRegisteredClaimNames.Iat,
-												new DateTimeOffset(now).ToUnixTimeSeconds().ToString())
+												new DateTimeOffset(now).ToUnixTimeSeconds().ToString()),
                     // TODO: add additional claims here
+										//Not going to put role info in JWT.  It will contain only who the user is.
                 };
 
 				var tokenExpirationMins =
@@ -89,11 +90,17 @@ namespace M8Scoring.Controllers {
 				);
 				var encodedToken = new JwtSecurityTokenHandler().WriteToken(token);
 
+				//roles
+				IList<string> rolesList = await UserManager.GetRolesAsync(user);
+				string[] rolesArray = new string[rolesList.Count];
+				rolesList.CopyTo(rolesArray, 0);
+
 				// build & return the response
 				var response = new TokenResponseViewModel()
 				{
 					token = encodedToken,
-					expiration = tokenExpirationMins
+					expiration = tokenExpirationMins,
+					roles = rolesArray
 				};
 				return Json(response);
 			} catch(Exception ex) {

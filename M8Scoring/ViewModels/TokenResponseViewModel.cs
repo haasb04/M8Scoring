@@ -12,6 +12,7 @@ namespace M8Scoring.ViewModels {
 		#region Properties
 		public string token { get; set; }
 		public int expiration { get; set; }
+		public string[] roles { get; set; }
 		#endregion
 	}
 }

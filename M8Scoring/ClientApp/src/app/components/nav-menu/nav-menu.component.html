@@ -22,7 +22,7 @@
                 <span class='glyphicon glyphicon-home'></span> Match
               </a>
             </li>
-            <li [routerLinkActive]='["link-active"]'>
+            <li *ngIf="this.auth.isInRole('Administrator')" [routerLinkActive]='["link-active"]'>
               <a [routerLink]='["admin"]'>
                 <span class='glyphicon glyphicon-wrench'></span> Admin
               </a>

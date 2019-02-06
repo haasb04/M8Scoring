@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using M8Scoring.Data;
+using M8Scoring.Internal;
 using M8Scoring.ViewModels;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,14 +17,15 @@ using Newtonsoft.Json;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace M8Scoring.Controllers {
+	[Authorize]
 	[Route("api/[controller]")]
 	public class TeamController : BaseApiController {
 		#region Private Fields
-		
+
 		#endregion
 
 		#region Constructors
-		public TeamController(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, IConfiguration configuration):base(context, roleManager, userManager, configuration) {
+		public TeamController(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, IConfiguration configuration) : base(context, roleManager, userManager, configuration) {
 
 		}
 		#endregion
@@ -55,6 +59,10 @@ namespace M8Scoring.Controllers {
 
 		[HttpGet("all")]
 		public IActionResult GetTeams(string listSpfInput) {
+			if(!IsInRole(AuthRoles.Admin)) {
+				return new UnauthorizedResult();
+			}
+
 			if(string.IsNullOrEmpty(listSpfInput)) {
 				return StatusCode(500, new BadRequestObjectResult("No Inputs"));
 			}
@@ -70,7 +78,7 @@ namespace M8Scoring.Controllers {
 		// GET api/<controller>/5
 		[HttpGet("{id}")]
 		public IActionResult Get(int id) {
-			
+
 			var team = DbContext.Teams
 								.Include(t => t.TeamPlayers)
 								 .ThenInclude(tp => tp.Player)
@@ -81,7 +89,7 @@ namespace M8Scoring.Controllers {
 			}
 
 			TeamViewModel vm = team.Adapt<TeamViewModel>();
-			
+
 			//players
 			List<PlayerViewModel> players = new List<PlayerViewModel>();
 			foreach(TeamPlayer tp in team.TeamPlayers) {
@@ -163,11 +171,11 @@ namespace M8Scoring.Controllers {
 			}
 
 			List<TeamPlayer> playersToRemove = team.TeamPlayers.Where(p => !model.Players.Any(mp => mp.Id == p.PlayerId)).ToList<TeamPlayer>();
-			
+
 			foreach(TeamPlayer p in playersToRemove) {
 				team.TeamPlayers.Remove(p);
 			}
-			
+
 			DbContext.SaveChanges();
 
 			return new JsonResult(team.Adapt<TeamViewModel>(), new JsonSerializerSettings() { Formatting = Formatting.Indented });
@@ -182,7 +190,7 @@ namespace M8Scoring.Controllers {
 			var team = DbContext.Teams.Where(t => t.Id == id).FirstOrDefault();
 
 			if(team == null) {
-				return NotFound(new { Error = string.Format("Team {0} was not found.", id)});
+				return NotFound(new { Error = string.Format("Team {0} was not found.", id) });
 			}
 
 			DbContext.Teams.Remove(team);

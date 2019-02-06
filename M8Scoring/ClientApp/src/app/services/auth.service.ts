@@ -77,4 +77,13 @@ export class AuthService {
 
     return false;
   }
+
+  isInRole(role: string) {
+    let ts: TokenResponse = this.getAuth();
+    if (ts) {
+      return ts.roles.indexOf(role) >= 0;
+    } else {
+      return false;
+    }
+  }
 }
