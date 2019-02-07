@@ -16,6 +16,8 @@ namespace M8Scoring.Data {
 		protected override void OnModelCreating(ModelBuilder modelBuilder) {
 			base.OnModelCreating(modelBuilder);
 
+			modelBuilder.Entity<Token>().Property(i => i.Id).ValueGeneratedOnAdd();
+
 			modelBuilder.Entity<TeamPlayer>()
 				.HasKey(tp => new { tp.TeamId, tp.PlayerId });
 
@@ -41,7 +43,7 @@ namespace M8Scoring.Data {
 		public DbSet<Team> Teams { get; set; }
 		public DbSet<Player> Players { get; set; }
 		public DbSet<Subscription> Subscriptions { get; set; }
-		
+		public DbSet<Token> Tokens { get; set; }
 		#endregion
 
 	}

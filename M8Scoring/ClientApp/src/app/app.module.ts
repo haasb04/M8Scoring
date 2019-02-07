@@ -15,6 +15,7 @@ import { AdminModule } from './modules/Admin/admin.module';
 import { LoginComponent } from './components/login/login.component';
 import { AuthService } from './services/auth.service';
 import { AuthInterceptor } from './services/auth-interceptor.service';
+import { AuthResponseInterceptor } from './services/auth-response-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -40,9 +41,14 @@ import { AuthInterceptor } from './services/auth-interceptor.service';
     
   ],
   providers: [
-    AuthService, {
+    AuthService,
+    {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    }, {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthResponseInterceptor,
       multi: true
     }
   ],

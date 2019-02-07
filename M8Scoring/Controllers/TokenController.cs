@@ -39,10 +39,93 @@ namespace M8Scoring.Controllers {
 			switch(model.grant_type) {
 				case "password":
 					return await GetToken(model);
+				case "refresh_token":
+					return await RefreshToken(model);
 				default:
 					// not supported - return a HTTP 401 (Unauthorized)
 					return new UnauthorizedResult();
 			}
+		}
+
+		private async Task<IActionResult> RefreshToken(TokenRequestViewModel model) {
+			try {
+				//check if recieved refresh token exists for the given clientid
+				var rt = DbContext.Tokens.FirstOrDefault(t => t.ClientId == model.client_id && t.Value == model.refresh_token);
+
+				if(rt == null) {
+					return new ForbidResult();// UnauthorizedResult();
+				}
+
+				//generate a nw refresh token
+				var rtNew = createRefreshToken(rt.ClientId, rt.UserId);
+
+				//invalidate the old refresh token
+				DbContext.Tokens.Remove(rt);
+
+				//add the new refresh token
+				DbContext.Tokens.Add(rtNew);
+
+				DbContext.SaveChanges();
+
+				var response = createAccessToken(rtNew.UserId, rtNew.Value);
+				return Json(response);
+			} catch(Exception ex) {
+				//TODO: LOG THIS
+				return new UnauthorizedResult();
+			}
+		}
+
+		private Token createRefreshToken(string clientId, string userId) {
+			return new Token()
+			{
+				ClientId = clientId,
+				UserId = userId,
+				Type = 0,
+				Value = Guid.NewGuid().ToString("N"),
+				CreatedDate = DateTime.UtcNow
+			};
+		}
+
+		private TokenResponseViewModel createAccessToken(string userId, string refreshToken) {
+			DateTime now = DateTime.UtcNow;
+			//add the regisered claim for JWT (RFC7519)
+			var claims = new[]
+			{
+				new Claim(JwtRegisteredClaimNames.Sub, userId),
+				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+				new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUnixTimeSeconds().ToString())
+			};
+
+			var tokenExpirationMins = Configuration.GetValue<int>("Auth:Jwt:TokenExpirationInMinutes");
+			var issuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Auth:Jwt:Key"]));
+
+			var token = new JwtSecurityToken(
+				issuer: Configuration["Auth:Jwt:Issuer"],
+				audience: Configuration["Auth:Jwt:Audience"],
+				claims: claims,
+				notBefore: now,
+				expires: now.Add(TimeSpan.FromMinutes(tokenExpirationMins)),
+				signingCredentials: new SigningCredentials(issuerSigningKey, SecurityAlgorithms.HmacSha256)
+				);
+
+			var encodedToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+			return new TokenResponseViewModel()
+			{
+				token = encodedToken,
+				expiration = tokenExpirationMins,
+				refresh_token = refreshToken,
+				roles = createRolesArray(DbContext.Users.FirstOrDefault(u => u.Id == userId))
+			};
+		}
+
+		private string[] createRolesArray(ApplicationUser user) {
+			//roles
+			IList<string> rolesList = UserManager.GetRolesAsync(user).Result;
+			string[] rolesArray = new string[rolesList.Count];
+			rolesList.CopyTo(rolesArray, 0);
+
+			return rolesArray;
 		}
 
 		private async Task<IActionResult> GetToken(TokenRequestViewModel model) {
@@ -60,49 +143,13 @@ namespace M8Scoring.Controllers {
 				}
 
 				// username & password matches: create and return the Jwt token.
+				var rt = createRefreshToken(model.client_id, user.Id);
 
-				DateTime now = DateTime.UtcNow;
+				DbContext.Tokens.Add(rt);
+				DbContext.SaveChanges();
 
-				// add the registered claims for JWT (RFC7519).
-				// For more info, see https://tools.ietf.org/html/rfc7519#section-4.1
-				var claims = new[] {
-										new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-										new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-										new Claim(JwtRegisteredClaimNames.Iat,
-												new DateTimeOffset(now).ToUnixTimeSeconds().ToString()),
-                    // TODO: add additional claims here
-										//Not going to put role info in JWT.  It will contain only who the user is.
-                };
-
-				var tokenExpirationMins =
-						Configuration.GetValue<int>("Auth:Jwt:TokenExpirationInMinutes");
-				var issuerSigningKey = new SymmetricSecurityKey(
-						Encoding.UTF8.GetBytes(Configuration["Auth:Jwt:Key"]));
-
-				var token = new JwtSecurityToken(
-						issuer: Configuration["Auth:Jwt:Issuer"],
-						audience: Configuration["Auth:Jwt:Audience"],
-						claims: claims,
-						notBefore: now,
-						expires: now.Add(TimeSpan.FromMinutes(tokenExpirationMins)),
-						signingCredentials: new SigningCredentials(
-								issuerSigningKey, SecurityAlgorithms.HmacSha256)
-				);
-				var encodedToken = new JwtSecurityTokenHandler().WriteToken(token);
-
-				//roles
-				IList<string> rolesList = await UserManager.GetRolesAsync(user);
-				string[] rolesArray = new string[rolesList.Count];
-				rolesList.CopyTo(rolesArray, 0);
-
-				// build & return the response
-				var response = new TokenResponseViewModel()
-				{
-					token = encodedToken,
-					expiration = tokenExpirationMins,
-					roles = rolesArray
-				};
-				return Json(response);
+				var t = createAccessToken(user.Id, rt.Value);
+				return Json(t);
 			} catch(Exception ex) {
 				return new UnauthorizedResult();
 			}

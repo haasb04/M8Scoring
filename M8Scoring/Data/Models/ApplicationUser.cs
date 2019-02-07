@@ -51,6 +51,8 @@ namespace M8Scoring.Data {
 		/// A list of all Teams for this user
 		/// </summary>
 		public virtual Subscription Subscription { get; set; }
+
+		public virtual List<Token> Tokens { get; set; }
 		#endregion
 
 	}

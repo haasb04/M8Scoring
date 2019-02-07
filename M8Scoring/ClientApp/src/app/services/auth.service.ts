@@ -23,24 +23,39 @@ export class AuthService {
       scope: "offline_access profile email"
     };
 
+    return this.getAuthFromServer(url, data);
+  }
 
+  refreshToken(): Observable<boolean> {
+    var url = "api/token/auth";
+    var data = {
+      client_id: this.clientId,
+      grant_type: "refresh_token",
+      refresh_token: this.getAuth()!.refresh_token,
+      scope: "offline_access profile email"
+    };
 
-    //return Observable.of(true); 
+    return this.getAuthFromServer(url, data);
+  }
 
+  //retrieve the access & refresh tokens from the server
+  getAuthFromServer(url: string, data: any): Observable<boolean> {
     return this.http.post<TokenResponse>(url, data)
-      .map((result) => {
-        let token = result && result.token;
-        //if the token is there, login has been successful
+      .map((res) => {
+        let token = res && res.token;
+        //if token is there, login has been successful
         if (token) {
-          this.setAuth(result);
+          //store username and jwt token
+          this.setAuth(res);
+
           return true;
         }
 
-        //failed login
+        //login failed
         return Observable.throw('Unauthorized');
       })
       .catch(error => {
-        return Observable.throw(error);// new Observable<any>(error);
+        return new Observable<any>(error);
       });
   }
 
