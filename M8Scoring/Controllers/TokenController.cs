@@ -53,7 +53,7 @@ namespace M8Scoring.Controllers {
 				var rt = DbContext.Tokens.FirstOrDefault(t => t.ClientId == model.client_id && t.Value == model.refresh_token);
 
 				if(rt == null) {
-					return new ForbidResult();// UnauthorizedResult();
+					return Json(null); // UnauthorizedResult();
 				}
 
 				//generate a nw refresh token
@@ -71,7 +71,7 @@ namespace M8Scoring.Controllers {
 				return Json(response);
 			} catch(Exception ex) {
 				//TODO: LOG THIS
-				return new UnauthorizedResult();
+				return new StatusCodeResult(500); // UnauthorizedResult();
 			}
 		}
 

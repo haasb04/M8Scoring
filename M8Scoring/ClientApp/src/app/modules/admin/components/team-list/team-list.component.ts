@@ -38,6 +38,7 @@ export class TeamListComponent extends SpfBaseComponent {
         this.teams = result.Data;
         this.spfOutputs = result.SpfOutput;
 
-    }, error => console.error(error));
+      },
+      error => console.error(error));
   }
 }
