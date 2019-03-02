@@ -17,6 +17,9 @@ namespace M8Scoring.Data {
 			base.OnModelCreating(modelBuilder);
 
 			modelBuilder.Entity<Token>().Property(i => i.Id).ValueGeneratedOnAdd();
+			//modelBuilder.Entity<Match>().Property(i => i.Id).ValueGeneratedOnAdd();
+			//modelBuilder.Entity<MatchSet>().Property(i => i.Id).ValueGeneratedOnAdd();
+			//modelBuilder.Entity<MatchSetPlayer>().Property(i => i.Id).ValueGeneratedOnAdd();
 
 			modelBuilder.Entity<TeamPlayer>()
 				.HasKey(tp => new { tp.TeamId, tp.PlayerId });
@@ -44,6 +47,11 @@ namespace M8Scoring.Data {
 		public DbSet<Player> Players { get; set; }
 		public DbSet<Subscription> Subscriptions { get; set; }
 		public DbSet<Token> Tokens { get; set; }
+
+		public DbSet<Match> Matches { get; set; }
+		public DbSet<MatchSet> MatchSets { get; set; }
+		public DbSet<MatchSetPlayer> MatchSetPlayers { get; set; }
+
 		#endregion
 
 	}

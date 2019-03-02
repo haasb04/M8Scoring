@@ -43,8 +43,11 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\interfaces\match.ts" />
+    <None Remove="ClientApp\src\app\interfaces\matchHeader.ts" />
     <None Remove="ClientApp\src\app\interfaces\matchSet.ts" />
     <None Remove="ClientApp\src\app\interfaces\MatchSetPlayer.ts" />
+    <None Remove="ClientApp\src\app\interfaces\matchSummary.ts" />
+    <None Remove="ClientApp\src\app\interfaces\matchSummaryList.ts" />
     <None Remove="ClientApp\src\app\interfaces\player.ts" />
     <None Remove="ClientApp\src\app\interfaces\playerList.ts" />
     <None Remove="ClientApp\src\app\interfaces\team.ts" />
@@ -63,7 +66,10 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\match.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\interfaces\MatchSetPlayer.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\matchHeader.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\matchSummary.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\matchSummaryList.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\matchSetPlayer.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\player.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\matchSet.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\playerList.ts" />

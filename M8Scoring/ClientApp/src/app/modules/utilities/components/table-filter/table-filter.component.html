@@ -1,5 +1,5 @@
 <div class="input-group">
-  <input id="search-box" class="form-control" type="text" autocomplete="off" [(ngModel)]="filterText" placeholder="{{placeholder}}" (keydown)="onKeyDown($event)" />
+  <input #searchBox id="search-box" class="form-control" type="text" autocomplete="off" [(ngModel)]="filterText" placeholder="{{placeholder}}" (keydown)="onKeyDown($event)" />
   
   <span class="input-group-btn">
     <button class="btn btn-primary" [class.disabled]="!filterApplied" (click)="clearFilter()"><i class="glyphicon glyphicon-filter"></i></button>

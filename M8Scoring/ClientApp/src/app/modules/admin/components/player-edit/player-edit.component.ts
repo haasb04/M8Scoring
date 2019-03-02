@@ -64,7 +64,4 @@ export class PlayerEditComponent implements OnInit {
 
   ngOnInit() {
   }
-
-
-
 }

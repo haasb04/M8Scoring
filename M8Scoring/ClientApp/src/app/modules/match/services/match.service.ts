@@ -6,10 +6,12 @@ import { last } from '@angular/router/src/utils/collection';
 export class MatchService {
   matchId: number;
   public match: Match;
+  public working: boolean;
 
   constructor(private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: any) {
-    this.createMatch(1, 2);
+    @Inject(PLATFORM_ID) private platformId: any,
+    @Inject('BASE_URL') private baseUrl: string) {
+    //this.createMatch(1, 2);
   }
 
   createMatch(myTeamId: number, opponentId: number) {
@@ -19,13 +21,13 @@ export class MatchService {
 
     //default settings
     this.match.WinMultiplier = 3;
-    this.match.OverUnderLimit = 325;
+    this.match.OverUnderPenalty = 325;
     this.match.PenaltyMultiplier = 5;
     this.match.NonRatedPlayerRate = 50;
     this.match.IsRegularSeason = true;
 
     this.match.Id = 1002;
-    this.match.Date = Date.now.toString();
+    this.match.Date = new Date(Date.now()).toJSON();
     this.match.Number = 1;
     this.match.TotalScore = 0;
     this.match.TotalOpponentScore = 0;
@@ -33,7 +35,7 @@ export class MatchService {
     this.match.OpponentBonusOrPenalty = 0;
     //create opponent team
     var opponent = <Team>{};
-    opponent.Id = 2;
+    //opponent.Id = 2;
     opponent.Number = 76101;
     opponent.Name = "Wolf Pack";
 
@@ -50,7 +52,7 @@ export class MatchService {
     this.match.Opponent = opponent;
 
     var myTeam = <Team>{};
-    myTeam.Id = 1;
+   // myTeam.Id = 1;
     myTeam.Number = 76102;
     myTeam.Name = "Holy Rollers";
 
@@ -85,14 +87,39 @@ export class MatchService {
     this.match.Set4.Player2 = <MatchSetPlayer>{ Rate: 0, Score: 0 };
     this.match.Set5.Player2 = <MatchSetPlayer>{ Rate: 0, Score: 0 };
 
-
-
+    //TEMP
+    var url = this.baseUrl + "api/match/"
+    this.http.put<Match>(url, this.match).subscribe(
+      res => { var v = res;}, error => console.log(error)
+    );
     return this.match;
   };
 
-  getMatch() {
+  saveMatch() {
+    if (this.match == null) {
+      return;
+    }
+    this.working = true;
+    var url = this.baseUrl + "api/match/";
+    this.http.post<boolean>(url, this.match).subscribe(
+      res => {
+        let r = res;
+        this.working = false;
+      }, error => console.log(error)
+    );
+  }
 
-    return this.match;
+  getMatch(id: number):any {
+    //retreive match from the server
+    this.working = true;
+    var url = this.baseUrl + "api/match/"+id;
+
+    return this.http.get<Match>(url).map(
+      (res) => {
+        this.match = res;
+        this.working = false;
+        return this.match;
+      }, error => console.log(error));
   }
 
   calculateMatch() {
@@ -159,19 +186,19 @@ export class MatchService {
     match.TotalRate = totalPlayerRatings;
     match.OpponentTotalRate = totalOpponentPlayerRatings;
     if (!unPlayedSet) {
-      if (totalPlayerRatings > match.OverUnderLimit) {
-        match.TeamBonusOrPenalty = -(totalPlayerRatings - match.OverUnderLimit) * match.PenaltyMultiplier;
+      if (totalPlayerRatings > match.OverUnderPenalty) {
+        match.TeamBonusOrPenalty = -(totalPlayerRatings - match.OverUnderPenalty) * match.PenaltyMultiplier;
       } else {
-        match.TeamBonusOrPenalty = weForfeit ? 0 : (match.OverUnderLimit - totalPlayerRatings);
+        match.TeamBonusOrPenalty = weForfeit ? 0 : (match.OverUnderPenalty - totalPlayerRatings);
       }
 
 
       teamScore += match.TeamBonusOrPenalty;
 
-      if (totalOpponentPlayerRatings > match.OverUnderLimit) {
-        match.OpponentBonusOrPenalty = -(totalOpponentPlayerRatings - match.OverUnderLimit) * match.PenaltyMultiplier;
+      if (totalOpponentPlayerRatings > match.OverUnderPenalty) {
+        match.OpponentBonusOrPenalty = -(totalOpponentPlayerRatings - match.OverUnderPenalty) * match.PenaltyMultiplier;
       } else {
-        match.OpponentBonusOrPenalty = theyForfeit ? 0 : (match.OverUnderLimit - totalOpponentPlayerRatings);
+        match.OpponentBonusOrPenalty = theyForfeit ? 0 : (match.OverUnderPenalty - totalOpponentPlayerRatings);
       }
 
       opponentScore += match.OpponentBonusOrPenalty;

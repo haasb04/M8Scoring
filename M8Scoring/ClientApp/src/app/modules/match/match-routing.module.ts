@@ -2,14 +2,16 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { MatchComponent } from './components/match/match.component';
+import { NewMatchComponent } from './components/new-match/new-match.component';
 
-const adminRoutes = [
-  {path: 'match', component: MatchComponent}
+const matchRoutes = [
+  { path: 'match/:id', component: MatchComponent },
+  { path: 'match/new/:teamId', component: NewMatchComponent }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forChild(adminRoutes)],
+    RouterModule.forChild(matchRoutes)],
   exports: [RouterModule]
 })
 export class MatchRoutingModule { }

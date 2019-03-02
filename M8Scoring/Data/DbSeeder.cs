@@ -12,7 +12,7 @@ namespace M8Scoring.Data {
 			//create default users (if there are none)
 			if(!dbContext.Users.Any()) {
 				createUsers(dbContext, roleManager, userManager).GetAwaiter().GetResult();
-				
+
 			}
 
 			//create test players and teams
@@ -20,10 +20,74 @@ namespace M8Scoring.Data {
 				createTestTeams(dbContext);
 				createSubscriptionTeams(dbContext);
 			}
+
+			//create dummy matches
+			if(!dbContext.Matches.Any()) {
+				createSubscriptionMatches(dbContext);
+			}
+
+
+			//TEMP
+			//Match m = dbContext.Matches
+			//	.Include(s => s.Sets)
+			//	.Where(i => i.Id == 1032)
+			//	.FirstOrDefault();
+
+			//dbContext.Matches.Remove(m);
+			//dbContext.SaveChanges();
 		}
 		#endregion
 
 		#region "Seed Methods"
+
+		private static void createSubscriptionMatches(ApplicationDbContext dbContext) {
+#if(DEBUG)
+			using(var tr = dbContext.Database.BeginTransaction()) {
+				try {
+					//Ryan
+					ApplicationUser ryan = dbContext.Users.Include(s => s.Subscription).ThenInclude(t => t.SubscriptionTeams).ThenInclude(s=>s.Team).FirstOrDefault(u => u.UserName == "Ryan");
+					foreach(SubscriptionTeam team in ryan.Subscription.SubscriptionTeams) {
+						//matches
+						createMatches(team, dbContext);
+					}
+
+					//Vodan
+					ApplicationUser vodan = dbContext.Users.Include(s => s.Subscription).ThenInclude(t => t.SubscriptionTeams).ThenInclude(s => s.Team).FirstOrDefault(u => u.UserName == "Vodan");
+					foreach(SubscriptionTeam team in vodan.Subscription.SubscriptionTeams) {
+						//matches
+						createMatches(team, dbContext);
+					}
+
+					//SOlice
+					ApplicationUser solice = dbContext.Users.Include(s => s.Subscription).ThenInclude(t => t.SubscriptionTeams).ThenInclude(s => s.Team).FirstOrDefault(u => u.UserName == "Solice");
+					foreach(SubscriptionTeam team in solice.Subscription.SubscriptionTeams) {
+						//matches
+						createMatches(team, dbContext);
+					}
+
+					dbContext.SaveChanges();
+					tr.Commit();
+				} catch(Exception) {
+					tr.Rollback();
+				}
+			}
+
+#endif
+		}
+
+		private static void createMatches(SubscriptionTeam team, ApplicationDbContext dbContext) {
+
+			for(int idx = 0; idx < 5; idx++) {
+				Match match = Match.CreateAdvancedMatch(true);
+				match.Team = team.Team;
+				match.Date = new DateTime(19, 1, 15 + idx);
+
+				match.Opponent = dbContext.Teams.Find(20 + idx);
+
+				dbContext.Matches.Add(match);
+			}
+		}
+
 		private static async Task createUsers(ApplicationDbContext dbContext, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager) {
 
 			DateTime createdDate = new DateTime(2019, 01, 10, 12, 30, 0);
@@ -51,7 +115,7 @@ namespace M8Scoring.Data {
 				user_Admin.EmailConfirmed = true;
 				user_Admin.LockoutEnabled = false;
 			}
-			
+
 #if(DEBUG)
 			//create some samples
 			var user_Ryan = new ApplicationUser() { SecurityStamp = Guid.NewGuid().ToString(), UserName = "Ryan", Email = "ryan@m8score.com", CreatedDate = createdDate, LastModifiedDate = lastModifiedDate };
@@ -84,7 +148,7 @@ namespace M8Scoring.Data {
 
 #endif
 
-			await dbContext.SaveChangesAsync(); 
+			await dbContext.SaveChangesAsync();
 		}
 
 		private static void createTestTeams(ApplicationDbContext dbContext) {
@@ -136,9 +200,9 @@ namespace M8Scoring.Data {
 					//user_Ryan
 					var ryan = dbContext.Users
 						.Include(s => s.Subscription)
-						.ThenInclude( t => t.SubscriptionTeams)
+						.ThenInclude(t => t.SubscriptionTeams)
 						.Where(u => u.UserName == "Ryan").FirstOrDefault();
-			
+
 					var team1 = dbContext.Teams.Find(1);
 					var team2 = dbContext.Teams.Find(2);
 
@@ -149,7 +213,7 @@ namespace M8Scoring.Data {
 					var vodan = dbContext.Users
 						.Include(s => s.Subscription)
 						.ThenInclude(t => t.SubscriptionTeams)
-						.	Where(u => u.UserName == "Vodan").FirstOrDefault();
+						.Where(u => u.UserName == "Vodan").FirstOrDefault();
 					var team3 = dbContext.Teams.Find(3);
 
 					vodan.Subscription.SubscriptionTeams.Add(new SubscriptionTeam() { Team = team3, Subscription = vodan.Subscription });

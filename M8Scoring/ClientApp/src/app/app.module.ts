@@ -15,13 +15,15 @@ import { AdminModule } from './modules/Admin/admin.module';
 import { LoginComponent } from './components/login/login.component';
 import { AuthService } from './services/auth.service';
 import { AuthInterceptor } from './services/auth-interceptor.service';
+import { DashboardTeamComponent } from './components/dashboard-team/dashboard-team.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    DashboardTeamComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

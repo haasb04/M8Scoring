@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ElementRef, AfterViewInit, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpUrlEncodingCodec } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable, pipe } from 'rxjs';
@@ -18,7 +18,6 @@ export class TableFilterComponent implements AfterViewInit, OnInit{
   activeIdx: number;
   filterText = '';
   filterApplied: boolean;
-  searchBox: HTMLElement;
   typeahead$: Observable<string[]>;
 
   constructor(private mEref: ElementRef, private http: HttpClient) {
@@ -30,6 +29,7 @@ export class TableFilterComponent implements AfterViewInit, OnInit{
   @Input() initialFilterText: string;
 
   @Output() filtered = new EventEmitter();
+  @ViewChild('searchBox') searchBox;
 
   ngOnInit() {
     this.filterText = this.initialFilterText;
@@ -37,8 +37,7 @@ export class TableFilterComponent implements AfterViewInit, OnInit{
   }
 
   ngAfterViewInit() {
-    this.searchBox = document.getElementById('search-box');
-    this.typeahead$ = fromEvent(this.searchBox, 'input').pipe(
+    this.typeahead$ = fromEvent(this.searchBox.nativeElement , 'input').pipe(
       map((e: any) => e.target.value),
       filter(text => text.length > 2),
       filter(text => text.length < 20),

@@ -23,7 +23,7 @@ export class PlayerSelectorComponent implements OnInit {
 
   onSelectPlayer(player: Player) {
     this.matchSetPlayer.Player = player;
-    this.matchSetPlayer.Rate = player.Rate;
+    this.matchSetPlayer.Rate = player.Rating;
     this.showPlayerSelector = false;
   }
 

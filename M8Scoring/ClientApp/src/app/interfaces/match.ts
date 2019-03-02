@@ -1,7 +1,7 @@
 interface Match {
   Id: number;
   Number: number;
-  Date: Date | string;
+  Date: string;
   Team: Team;
   Opponent: Team;
   IsComplete: boolean;
@@ -12,7 +12,7 @@ interface Match {
   Set5: MatchSet;
   //settings
   WinMultiplier: number;
-  OverUnderLimit: number;
+  OverUnderPenalty: number;
   PenaltyMultiplier: number;
   NonRatedPlayerRate: number;
   IsRegularSeason: boolean;

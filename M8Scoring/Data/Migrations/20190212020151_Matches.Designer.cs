@@ -4,14 +4,16 @@ using M8Scoring.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace M8Scoring.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190212020151_Matches")]
+    partial class Matches
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,8 +103,6 @@ namespace M8Scoring.Data.Migrations
 
                     b.Property<DateTime>("LastModifiedDate");
 
-                    b.Property<string>("Location");
-
                     b.Property<int>("NonRatedPlayerRate");
 
                     b.Property<int>("Number");
@@ -114,6 +114,16 @@ namespace M8Scoring.Data.Migrations
                     b.Property<int>("OverUnderPenalty");
 
                     b.Property<int>("PenaltyMultiplier");
+
+                    b.Property<int?>("Set1Id");
+
+                    b.Property<int?>("Set2Id");
+
+                    b.Property<int?>("Set3Id");
+
+                    b.Property<int?>("Set4Id");
+
+                    b.Property<int?>("Set5Id");
 
                     b.Property<int>("TeamBonusOrPenalty");
 
@@ -133,6 +143,16 @@ namespace M8Scoring.Data.Migrations
 
                     b.HasIndex("OpponentId");
 
+                    b.HasIndex("Set1Id");
+
+                    b.HasIndex("Set2Id");
+
+                    b.HasIndex("Set3Id");
+
+                    b.HasIndex("Set4Id");
+
+                    b.HasIndex("Set5Id");
+
                     b.HasIndex("TeamId");
 
                     b.ToTable("Matches");
@@ -144,7 +164,9 @@ namespace M8Scoring.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("MatchId");
+                    b.Property<int?>("Player1Id");
+
+                    b.Property<int?>("Player2Id");
 
                     b.Property<int>("SetNumber");
 
@@ -152,7 +174,9 @@ namespace M8Scoring.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MatchId");
+                    b.HasIndex("Player1Id");
+
+                    b.HasIndex("Player2Id");
 
                     b.ToTable("MatchSets");
                 });
@@ -165,19 +189,11 @@ namespace M8Scoring.Data.Migrations
 
                     b.Property<bool>("Forfeit");
 
-                    b.Property<int>("MatchSetId");
-
-                    b.Property<int>("Number");
-
                     b.Property<int?>("PlayerId");
 
                     b.Property<int>("Rate");
 
-                    b.Property<int>("Score");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("MatchSetId");
 
                     b.HasIndex("PlayerId");
 
@@ -424,6 +440,26 @@ namespace M8Scoring.Data.Migrations
                         .WithMany()
                         .HasForeignKey("OpponentId");
 
+                    b.HasOne("M8Scoring.Data.MatchSet", "Set1")
+                        .WithMany()
+                        .HasForeignKey("Set1Id");
+
+                    b.HasOne("M8Scoring.Data.MatchSet", "Set2")
+                        .WithMany()
+                        .HasForeignKey("Set2Id");
+
+                    b.HasOne("M8Scoring.Data.MatchSet", "Set3")
+                        .WithMany()
+                        .HasForeignKey("Set3Id");
+
+                    b.HasOne("M8Scoring.Data.MatchSet", "Set4")
+                        .WithMany()
+                        .HasForeignKey("Set4Id");
+
+                    b.HasOne("M8Scoring.Data.MatchSet", "Set5")
+                        .WithMany()
+                        .HasForeignKey("Set5Id");
+
                     b.HasOne("M8Scoring.Data.Team", "Team")
                         .WithMany()
                         .HasForeignKey("TeamId");
@@ -431,19 +467,17 @@ namespace M8Scoring.Data.Migrations
 
             modelBuilder.Entity("M8Scoring.Data.MatchSet", b =>
                 {
-                    b.HasOne("M8Scoring.Data.Match", "Match")
-                        .WithMany("Sets")
-                        .HasForeignKey("MatchId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("M8Scoring.Data.MatchSetPlayer", "Player1")
+                        .WithMany()
+                        .HasForeignKey("Player1Id");
+
+                    b.HasOne("M8Scoring.Data.MatchSetPlayer", "Player2")
+                        .WithMany()
+                        .HasForeignKey("Player2Id");
                 });
 
             modelBuilder.Entity("M8Scoring.Data.MatchSetPlayer", b =>
                 {
-                    b.HasOne("M8Scoring.Data.MatchSet", "MatchSet")
-                        .WithMany("Players")
-                        .HasForeignKey("MatchSetId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("M8Scoring.Data.Player", "Player")
                         .WithMany()
                         .HasForeignKey("PlayerId");

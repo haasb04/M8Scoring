@@ -1,12 +1,18 @@
-<div>Match:  {{match.Team.Name}} vs {{match.Opponent.Name}} </div>
-<div>{{match.Id}}</div>
-<hr />
-<form #matchForm="ngForm">
-  <div>Score:  Us - {{match.TotalScore}}  Them - {{match.TotalOpponentScore}}</div>
-  <app-match-set [matchSet]="match.Set1"></app-match-set>
-  <app-match-set [matchSet]="match.Set2"></app-match-set>
-  <app-match-set [matchSet]="match.Set3"></app-match-set>
-  <app-match-set [matchSet]="match.Set4"></app-match-set>
-  <app-match-set [matchSet]="match.Set5"></app-match-set>
+<div class="progress progress-striped active" *ngIf="matchService.working">
+  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div>
+</div>
+<div *ngIf="match">
+  <div>Match:  {{match.Team.Name}} vs {{match.Opponent.Name}} </div>
+  <div>{{match.Id}}</div>
+  <hr />
 
-</form>
+  <form #matchForm="ngForm">
+    <div>Score:  Us - {{match.TotalScore}}  Them - {{match.TotalOpponentScore}}</div>
+    <app-match-set [matchSet]="match.Set1"></app-match-set>
+    <app-match-set [matchSet]="match.Set2"></app-match-set>
+    <app-match-set [matchSet]="match.Set3"></app-match-set>
+    <app-match-set [matchSet]="match.Set4"></app-match-set>
+    <app-match-set [matchSet]="match.Set5"></app-match-set>
+    <button type="submit" class="btn btn-success" [disabled]="match==null || matchService.working" (click)="onSave()">Save</button>
+  </form>
+</div>

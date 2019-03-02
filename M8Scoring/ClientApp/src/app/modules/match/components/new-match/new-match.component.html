@@ -1,0 +1,37 @@
+<h2>{{title}}</h2>
+<div class="match-edit" *ngIf="team">
+  <form #matchForm="ngForm" (ngSubmit)="onSubmit(matchHeader)">
+    <h3>{{team.Name}}</h3>
+    Opponent: <opponent-selector></opponent-selector>
+    <div>
+      <label for="date">Date</label>
+      <br />
+      <input class="form-control" type="date" id="date" name="date" [(ngModel)]="matchHeader.Date" #date="ngModel" required />
+      <div *ngIf="date.invalid && (date.dirty || date.touched)" class="alert alert-danger">
+        <div *ngIf="date.errors.required">
+          Date is required
+        </div>
+      </div>
+    </div>
+    <div>
+      <!--<label for="location">Location</label>
+      <br/>-->
+      <!--<input type="text" id="location" [(ngModel)]="matchHeader.Location" name="location" #location="ngModel" />-->
+    </div>
+    <div>
+      <label for="level">Level</label>
+      <select class="form-control" [(ngModel)]="matchHeader.Level" name="level" id="level">
+        <option value="Open">Open</option>
+        <option value="Advanced">Advanced</option>
+        <option value="Masters">Masters</option>
+      </select>
+    </div>
+    <div>
+      <label for="isRegularSeason">Regular Season?</label>
+      <br/>
+      <input class="form-control" type="checkbox" id="isRegularSeason" [(ngModel)]="matchHeader.IsRegularSeason" name="isRegularSeason" />
+    </div>
+    <button type="submit" class="btn btn-success" [disabled]="!matchForm.form.valid">Submit</button>
+    <button type="button" class="btn btn-cancel" (click)="onBack()">Cancel</button>
+  </form>
+</div>

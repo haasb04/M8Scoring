@@ -54,6 +54,10 @@ namespace M8Scoring.Controllers {
 			}
 		}
 
+		internal ApplicationUser CurrentUser() {
+			string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+			return DbContext.Users.Where(u => u.Id == userId).FirstOrDefault();
+		}
 		#endregion
 	}
 }
