@@ -2,7 +2,7 @@
 <div class="match-edit" *ngIf="team">
   <form #matchForm="ngForm" (ngSubmit)="onSubmit(matchHeader)">
     <h3>{{team.Name}}</h3>
-    Opponent: <opponent-selector></opponent-selector>
+    Opponent: <opponent-selector placeholder="enter team name or number" [(opponent)]="matchHeader.OpponentId" searchUrl="api/team/opponentSearch"></opponent-selector>
     <div>
       <label for="date">Date</label>
       <br />
@@ -14,9 +14,9 @@
       </div>
     </div>
     <div>
-      <!--<label for="location">Location</label>
-      <br/>-->
-      <!--<input type="text" id="location" [(ngModel)]="matchHeader.Location" name="location" #location="ngModel" />-->
+      <label for="matchLocation">Location</label>
+      <br/>
+      <input class="form-control" type="text" id="mathLocation" [(ngModel)]="matchHeader.Location" name="matchLocation" #matchLocation="ngModel" />
     </div>
     <div>
       <label for="level">Level</label>

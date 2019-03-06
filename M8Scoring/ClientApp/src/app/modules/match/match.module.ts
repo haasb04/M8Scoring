@@ -9,6 +9,8 @@ import { PlayerSelectorComponent } from './components/player-selector/player-sel
 import { MatchSetComponent } from './components/match-set/match-set.component';
 import { NewMatchComponent } from './components/new-match/new-match.component';
 import { OpponentSelectorComponent } from './components/opponent-selector/opponent-selector.component';
+import { FifthSetScenarioComponent } from './components/fifth-set-scenario/fifth-set-scenario.component';
+import { ReportViewComponent } from './components/report-view/report-view.component';
 
 @NgModule({
   imports: [
@@ -20,6 +22,6 @@ import { OpponentSelectorComponent } from './components/opponent-selector/oppone
   providers: [
     MatchService
   ],
-  declarations: [MatchComponent, MatchSetComponent, PlayerSelectorComponent, NewMatchComponent, OpponentSelectorComponent]
+  declarations: [MatchComponent, MatchSetComponent, PlayerSelectorComponent, NewMatchComponent, OpponentSelectorComponent, FifthSetScenarioComponent, ReportViewComponent]
 })
 export class MatchModule { }

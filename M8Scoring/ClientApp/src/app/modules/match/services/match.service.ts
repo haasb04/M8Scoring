@@ -1,99 +1,21 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { last } from '@angular/router/src/utils/collection';
+import { ReplaySubject } from 'rxjs';
+import { settings } from 'cluster';
 
 @Injectable()
 export class MatchService {
   matchId: number;
   public match: Match;
   public working: boolean;
+  public fifthSetResults: ReplaySubject<FifthSetResults> = new ReplaySubject(1);
 
   constructor(private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: any,
     @Inject('BASE_URL') private baseUrl: string) {
     //this.createMatch(1, 2);
   }
-
-  createMatch(myTeamId: number, opponentId: number) {
-    //server.CreateMatch(myTeam.Id, opponent.Id); 
-
-    this.match = <Match>{};
-
-    //default settings
-    this.match.WinMultiplier = 3;
-    this.match.OverUnderPenalty = 325;
-    this.match.PenaltyMultiplier = 5;
-    this.match.NonRatedPlayerRate = 50;
-    this.match.IsRegularSeason = true;
-
-    this.match.Id = 1002;
-    this.match.Date = new Date(Date.now()).toJSON();
-    this.match.Number = 1;
-    this.match.TotalScore = 0;
-    this.match.TotalOpponentScore = 0;
-    this.match.TeamBonusOrPenalty = 0;
-    this.match.OpponentBonusOrPenalty = 0;
-    //create opponent team
-    var opponent = <Team>{};
-    //opponent.Id = 2;
-    opponent.Number = 76101;
-    opponent.Name = "Wolf Pack";
-
-    var opponentList: Player[] = [
-      <Player>{ Id: 1, Number: 33739, FirstName: 'McEathron, Darren', Rate: 73 },
-      <Player>{ Id: 2, Number: 8978, FirstName: 'Kamman, Brian', Rate: 44 },
-      <Player>{ Id: 3, Number: 11041, FirstName: 'Souba, Todd', Rate: 96 },
-      <Player>{ Id: 4, Number: 14305, FirstName: 'Samson, James', Rate: 46 },
-      <Player>{ Id: 5, Number: 18985, FirstName: 'Dave, Krutz', Rate: 82 },
-      <Player>{ Id: 6, Number: 34331, FirstName: 'Matlock, Christopher', Rate: 54 },
-      <Player>{ Id: 7, Number: 38208, FirstName: 'Valenzuela, Joe', Rate: 63 }
-    ];
-    opponent.Players = opponentList;
-    this.match.Opponent = opponent;
-
-    var myTeam = <Team>{};
-   // myTeam.Id = 1;
-    myTeam.Number = 76102;
-    myTeam.Name = "Holy Rollers";
-
-    var myList: Player[] = [
-      <Player>{ Id: 8, Number: 35560, FirstName: 'Williams, Chase', Rate: 54 },
-      <Player>{ Id: 9, Number: 14798, FirstName: 'Forar, Brandon', Rate: 98 },
-      <Player>{ Id: 10, Number: 23704, FirstName: 'Hebig, Travis', Rate: 49 },
-      <Player>{ Id: 11, Number: 35697, FirstName: 'Gregerson, Brian', Rate: 68 },
-      <Player>{ Id: 12, Number: 37377, FirstName: 'Haas, Brian', Rate: 55 },
-      <Player>{ Id: 13, Number: 37378, FirstName: 'Wolf, Cory', Rate: 72 },
-      <Player>{ Id: 14, Number: 37770, FirstName: 'Forar, Nick', Rate: 64 }
-    ];
-    myTeam.Players = myList;
-    this.match.Team = myTeam;
-
-    //create sets.  These will be created by server
-    this.match.Set1 = <MatchSet>{ Id: 1, SetNumber: 1 };
-    this.match.Set2 = <MatchSet>{ Id: 2, SetNumber: 2 };
-    this.match.Set3 = <MatchSet>{ Id: 3, SetNumber: 3 };
-    this.match.Set4 = <MatchSet>{ Id: 4, SetNumber: 4 };
-    this.match.Set5 = <MatchSet>{ Id: 5, SetNumber: 5 };
-
-    this.match.Set1.Player1 = <MatchSetPlayer>{ Rate: 0, Score: 0 };
-    this.match.Set2.Player1 = <MatchSetPlayer>{ Rate: 0, Score: 0 };
-    this.match.Set3.Player1 = <MatchSetPlayer>{ Rate: 0, Score: 0 };
-    this.match.Set4.Player1 = <MatchSetPlayer>{ Rate: 0, Score: 0 };
-    this.match.Set5.Player1 = <MatchSetPlayer>{ Rate: 0, Score: 0 };
-
-    this.match.Set1.Player2 = <MatchSetPlayer>{ Rate: 0, Score: 0 };
-    this.match.Set2.Player2 = <MatchSetPlayer>{ Rate: 0, Score: 0 };
-    this.match.Set3.Player2 = <MatchSetPlayer>{ Rate: 0, Score: 0 };
-    this.match.Set4.Player2 = <MatchSetPlayer>{ Rate: 0, Score: 0 };
-    this.match.Set5.Player2 = <MatchSetPlayer>{ Rate: 0, Score: 0 };
-
-    //TEMP
-    var url = this.baseUrl + "api/match/"
-    this.http.put<Match>(url, this.match).subscribe(
-      res => { var v = res;}, error => console.log(error)
-    );
-    return this.match;
-  };
 
   saveMatch() {
     if (this.match == null) {
@@ -109,10 +31,10 @@ export class MatchService {
     );
   }
 
-  getMatch(id: number):any {
+  getMatch(id: number): any {
     //retreive match from the server
     this.working = true;
-    var url = this.baseUrl + "api/match/"+id;
+    var url = this.baseUrl + "api/match/" + id;
 
     return this.http.get<Match>(url).map(
       (res) => {
@@ -124,6 +46,24 @@ export class MatchService {
 
   calculateMatch() {
     this.calculate(this.match);
+    this.determineFifthSetScenarios(this.match);
+
+
+  }
+
+  determineFifthSetScenarios(match: Match) {
+    if (match.Set1.Player1.Player != null && match.Set1.Player2.Player != null &&
+      match.Set2.Player1.Player != null && match.Set2.Player2.Player != null &&
+      match.Set3.Player1.Player != null && match.Set3.Player2.Player != null &&
+      match.Set4.Player1.Player != null && match.Set4.Player2.Player != null &&
+      match.Set5.Player1.Player != null && match.Set5.Player2.Player != null
+    ) {
+      //fifth set scenarios
+      var results = <FifthSetResults>{};
+      results.MustGet = this.determineMustGet();
+      results.MustHold = this.determineHoldThemTo();
+      this.fifthSetResults.next(results);
+    }
   }
 
   calculate(match: Match) {
@@ -209,6 +149,12 @@ export class MatchService {
   }
 
   calculateSetScore(match: Match, set: MatchSet) {
+
+    if (set.Player1.Player == null || set.Player2.Player == null) {
+      //dont calculate
+      return [0, 0];
+    }
+
     let score: number = set.Player1.Score;
     let opponentScore: number = set.Player2.Score;
     let effectiveRate = set.Player1.Rate;
@@ -254,6 +200,10 @@ export class MatchService {
     let opponentMargin: number = 0;
     let winBonus: number = 0;
     let opponentWinBonus: number = 0;
+    let addOn: number = 0;
+    let opponentAddOn: number = 0;
+    let setTotal: number = 0;
+    let opponentSetTotal: number = 0;
 
     if (set.Win) {
       if (set.Player1.Score > 0) {
@@ -267,7 +217,8 @@ export class MatchService {
         delta = effectiveOpponentRate - set.Player2.Score;
       }
       if (delta > 0) {
-        score += (delta * match.WinMultiplier);
+        addOn = delta * match.WinMultiplier;
+        score += addOn;
         margin = delta;
       }
     } else {
@@ -282,12 +233,118 @@ export class MatchService {
         delta = effectiveRate - set.Player1.Score;
       }
       if (delta > 0) {
-        opponentScore += (delta * match.WinMultiplier);
+        opponentAddOn = delta * match.WinMultiplier;
+        opponentScore += opponentAddOn;
         opponentMargin = delta;
       }
     }
+    set.Margin = margin;
+    set.OpponentMargin = opponentMargin;
+    set.WinBonus = winBonus;
+    set.OpponentWinBonus = opponentWinBonus;
+    set.Multiplier = match.WinMultiplier;
+    set.AddOn = addOn;
+    set.OpponentAddOn = opponentAddOn;
+    set.SetTotal = score;
+    set.OpponentSetTotal = opponentScore;
+
     return [score, opponentScore];
+  }
 
+  determineMustGet() {
+    //Clone the match
+    //Set fifth match score to rate and set the win flag.
+    //For opponent score = 0; opponent score < their rate +15
+    ////if their match score > our match score, we lose.
+    ////Must hold oponent to one less than this ball.
+    var scenarioResult: number[] = new Array(16);
+    var mustGetScore: number = 0;
 
+    var testMatch = JSON.parse(JSON.stringify(this.match));
+
+    var effectiveRate: number;
+    var effectiveOpponentRate: number;
+
+    if (testMatch.Set5.Player1.Rate == -1 || testMatch.Set5.Player2.Rate == -1) {
+      effectiveRate = effectiveOpponentRate = 50;
+    } else {
+      effectiveRate = testMatch.Set5.Player1.Rate;
+      effectiveOpponentRate = testMatch.Set5.Player2.Rate;
+    }
+
+    scenarioResult[0] = effectiveOpponentRate;
+    var i: number;
+    for (i = 0; i < 15; i++) {
+      testMatch.Set5.Player2.Score = effectiveOpponentRate + i;
+
+      testMatch.Set5.Win = false;
+      mustGetScore = 0;
+      var myScore: number;
+      var lastTopScore = 0;
+      for (myScore = lastTopScore; myScore <= effectiveRate + 15; myScore++) {
+        testMatch.Set5.Player1.Score = myScore;
+        this.calculate(testMatch);
+        if (testMatch.TotalOpponentScore < testMatch.TotalScore) {
+          mustGetScore = myScore;
+          lastTopScore = myScore;
+          break;
+        }
+      }
+
+      scenarioResult[i + 1] = mustGetScore;
+      //console.log("Opponent Score: " + testMatch.Set5.Player2.Score + ", must get to: " + mustGetScore);
+    }
+
+    return scenarioResult;
+  }
+
+  determineHoldThemTo() {
+    //Clone match
+    //Set fifth match score to rate and  set the win flag
+    //For opponent score = 0; opponent score < their rate +14
+    //If their match score > our match score, we lose.
+    //Must hold opponent to one less than this ball.
+    var scenarioResult: number[] = new Array(16);
+    var maxOpponentScore: number = 0;
+
+    var testMatch = JSON.parse(JSON.stringify(this.match)); //{ ...this.match };
+
+    var effectiveRate: number;
+    var effectiveOpponentRate: number;
+
+    if (testMatch.Set5.Player1.Rate == -1 || testMatch.Set5.Player2.Rate == -1) {
+      effectiveRate = effectiveOpponentRate = 50;
+    } else {
+      effectiveRate = testMatch.Set5.Player1.Rate;
+      effectiveOpponentRate = testMatch.Set5.Player2.Rate;
+    }
+
+    scenarioResult[0] = effectiveRate;
+    //find the numbers;
+    var i: number;
+    for (i = 0; i < 15; i++) {
+      testMatch.Set5.Player1.Score = effectiveRate + i;
+
+      testMatch.Set5.Win = true;
+      maxOpponentScore = 0;
+
+      var oScore: number;
+      var oLastTop: number = 0;
+
+      for (oScore = oLastTop; oScore <= effectiveOpponentRate + 15; oScore++) {
+        testMatch.Set5.Player2.Score = oScore;
+        this.calculate(testMatch);
+        if (testMatch.TotalOpponentScore >= testMatch.TotalScore) {
+          maxOpponentScore = oScore - 1;
+          oLastTop = maxOpponentScore;
+          break;
+        }
+      }
+
+      scenarioResult[i + 1] = maxOpponentScore;
+      console.log("Score: " + testMatch.Set5.Player1.Score + ", must hold opponent to: " + maxOpponentScore);
+    }
+
+    return scenarioResult;
   }
 }

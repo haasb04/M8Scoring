@@ -2,6 +2,7 @@ interface Match {
   Id: number;
   Number: number;
   Date: string;
+  Location: string;
   Team: Team;
   Opponent: Team;
   IsComplete: boolean;

@@ -44,6 +44,19 @@ namespace M8Scoring.Controllers {
 			return new JsonResult(list, new JsonSerializerSettings() { Formatting = Formatting.Indented });
 		}
 
+		[HttpGet("OpponentSearch/{term}")]
+		public IActionResult OpponentSearch(string term) {
+			int termAsInt = 0;
+			int.TryParse(term, out termAsInt);
+
+			var list = DbContext.Teams
+								.Where(t => t.Name.Contains(term) || t.Number == termAsInt)
+								.Take(10)
+								.Select(t => new OpponentSearchViewModel() { TeamId = t.Id, Label = string.Format("{0} - {1}", t.Name, t.Number) });
+
+			return new JsonResult(list.ToArray(), JsonSettings);
+		}
+
 		#endregion
 
 		// GET: api/<controller>

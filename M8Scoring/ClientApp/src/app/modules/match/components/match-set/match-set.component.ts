@@ -18,6 +18,13 @@ export class MatchSetComponent implements OnInit {
   
   }
 
+  set winMatch(win: boolean) {
+    this.matchSet.Win = win;
+    this.matchService.calculateMatch();
+  }
+
+  get winMatch(): boolean { return this.matchSet.Win; }
+
   set player1Score(score: number) {
     this.matchSet.Player1.Score = score;
     this.matchService.calculateMatch();

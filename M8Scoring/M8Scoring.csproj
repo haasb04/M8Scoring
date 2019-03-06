@@ -48,8 +48,10 @@
     <None Remove="ClientApp\src\app\interfaces\MatchSetPlayer.ts" />
     <None Remove="ClientApp\src\app\interfaces\matchSummary.ts" />
     <None Remove="ClientApp\src\app\interfaces\matchSummaryList.ts" />
+    <None Remove="ClientApp\src\app\interfaces\opponentSearch.ts" />
     <None Remove="ClientApp\src\app\interfaces\player.ts" />
     <None Remove="ClientApp\src\app\interfaces\playerList.ts" />
+    <None Remove="ClientApp\src\app\interfaces\ScenarioResult.ts" />
     <None Remove="ClientApp\src\app\interfaces\team.ts" />
     <None Remove="ClientApp\src\app\interfaces\TeamList.ts" />
     <None Remove="ClientApp\src\app\interfaces\token.ts" />
@@ -70,9 +72,11 @@
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\matchSummary.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\matchSummaryList.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\matchSetPlayer.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\opponentSearch.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\player.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\matchSet.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\playerList.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\ScenarioResult.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\team.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\teamList.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\token.ts" />

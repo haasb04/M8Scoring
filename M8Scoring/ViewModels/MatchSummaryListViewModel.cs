@@ -54,7 +54,7 @@ namespace M8Scoring.ViewModels {
 					}
 					break;
 				default:
-					matches = matches.OrderBy(m => m.Id);
+					matches = matches.OrderByDescending(m => m.Id);
 					break;
 			}
 

@@ -1,3 +1,6 @@
-<p>
-  opponent-selector works!
-</p>
+<div class="input-group">
+  <input #searchBox id="search-box" class="form-control" type="text" autocomplete="off" [(ngModel)]="filterText" placeholder="{{placeholder}}" (keydown)="onKeyDown($event)" />
+  <div class="list-group" *ngIf="results.length > 0">
+    <a class="list-group-item" *ngFor="let result of results;let idx = index" [class.active]="idx == activeIdx" (click)="setFilter(idx)">{{result.Label}}</a>
+  </div>
+</div>

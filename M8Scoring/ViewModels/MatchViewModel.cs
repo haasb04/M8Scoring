@@ -13,6 +13,7 @@ namespace M8Scoring.ViewModels {
 		public int Id { get; set; }
 		public int Number { get; set; }
 		public string Date { get; set; }
+		public string Location { get; set; }
 		public int WinMultiplier { get; set; }
 		public int OverUnderPenalty { get; set; }
 		public int PenaltyMultiplier { get; set; }

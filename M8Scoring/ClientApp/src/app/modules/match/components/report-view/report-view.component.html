@@ -1,0 +1,174 @@
+<h1>Report View</h1>
+<div *ngIf="match != null">
+  <div class="col-lg-6">
+    <table class="tabled-striped text-center">
+      <tr>
+        <td></td>
+        <td>
+          Your Rate
+        </td>
+        <td>Your Score</td>
+        <td>Margin</td>
+        <td>Add On</td>
+        <td>Win Bonus</td>
+        <td>Total</td>
+      </tr>
+      <tr>
+        <td>Set 1</td>
+        <td>{{match.Set1.Player1.Rate}}</td>
+        <td>{{match.Set1.Player1.Score}}</td>
+        <td>{{match.Set1.Margin}} x3</td>
+        <td>{{match.Set1.AddOn}}</td>
+        <td>{{match.Set1.WinBonus}}</td>
+        <td>{{match.Set1.SetTotal}}</td>
+      </tr>
+      <tr>
+        <td>Set 2</td>
+        <td>{{match.Set2.Player1.Rate}}</td>
+        <td>{{match.Set2.Player1.Score}}</td>
+        <td>{{match.Set2.Margin}} x3</td>
+        <td>{{match.Set2.AddOn}}</td>
+        <td>{{match.Set2.WinBonus}}</td>
+        <td>{{match.Set2.SetTotal}}</td>
+      </tr>
+      <tr>
+        <td colspan="6"></td>
+        <td>{{match.Set1.SetTotal + match.Set2.SetTotal }}</td>
+      </tr>
+      <tr>
+        <td>Set 3</td>
+        <td>{{match.Set3.Player1.Rate}}</td>
+        <td>{{match.Set3.Player1.Score}}</td>
+        <td>{{match.Set3.Margin}} x3</td>
+        <td>{{match.Set3.AddOn}}</td>
+        <td>{{match.Set3.WinBonus}}</td>
+        <td>{{match.Set3.SetTotal}}</td>
+      </tr>
+      <tr>
+        <td colspan="6"></td>
+        <td>{{match.Set1.SetTotal + match.Set2.SetTotal + match.Set3.SetTotal }}</td>
+      </tr>
+      <tr>
+        <td>Set 4</td>
+        <td>{{match.Set4.Player1.Rate}}</td>
+        <td>{{match.Set4.Player1.Score}}</td>
+        <td>{{match.Set4.Margin}} x3</td>
+        <td>{{match.Set4.AddOn}}</td>
+        <td>{{match.Set4.WinBonus}}</td>
+        <td>{{match.Set4.SetTotal}}</td>
+      </tr>
+      <tr>
+        <td colspan="6"></td>
+        <td>{{match.Set1.SetTotal + match.Set2.SetTotal + match.Set3.SetTotal + match.Set4.SetTotal }}</td>
+      </tr>
+      <tr>
+        <td>Set 5</td>
+        <td>{{match.Set5.Player1.Rate}}</td>
+        <td>{{match.Set5.Player1.Score}}</td>
+        <td>{{match.Set5.Margin}} x3</td>
+        <td>{{match.Set5.AddOn}}</td>
+        <td>{{match.Set5.WinBonus}}</td>
+        <td>{{match.Set5.SetTotal}}</td>
+      </tr>
+      <tr>
+        <td colspan="6"></td>
+        <td>{{match.Set1.SetTotal + match.Set2.SetTotal + match.Set3.SetTotal + match.Set4.SetTotal + match.Set5.SetTotal }}</td>
+      </tr>
+      <tr>
+        <td colspan="6">
+          Total Rate: {{match.TotalRate}} / Over-Under: {{match.TotalRate - match.OverUnderPenalty}}
+        </td>
+        <td>{{match.TeamBonusOrPenalty}}</td>
+      </tr>
+      <tr>
+        <td colspan="7">Total Team Points: {{match.TotalScore}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-lg-6">
+    <table class="tabled-striped text-center">
+      <tr>
+        <td></td>
+        <td>
+          Opp Rate
+        </td>
+        <td>Opp Score</td>
+        <td>Margin</td>
+        <td>Add On</td>
+        <td>Win Bonus</td>
+        <td>Total</td>
+      </tr>
+      <tr>
+        <td>Set 1</td>
+        <td>{{match.Set1.Player2.Rate}}</td>
+        <td>{{match.Set1.Player2.Score}}</td>
+        <td>{{match.Set1.OpponentMargin}} x3</td>
+        <td>{{match.Set1.OpponentAddOn}}</td>
+        <td>{{match.Set1.OpponentWinBonus}}</td>
+        <td>{{match.Set1.OpponentSetTotal}}</td>
+      </tr>
+      <tr>
+        <td>Set 2</td>
+        <td>{{match.Set2.Player2.Rate}}</td>
+        <td>{{match.Set2.Player2.Score}}</td>
+        <td>{{match.Set2.OpponentMargin}} x3</td>
+        <td>{{match.Set2.OpponentAddOn}}</td>
+        <td>{{match.Set2.OpponentWinBonus}}</td>
+        <td>{{match.Set2.OpponentSetTotal}}</td>
+      </tr>
+      <tr>
+        <td colspan="6"></td>
+        <td>{{match.Set1.OpponentSetTotal + match.Set2.OpponentSetTotal }}</td>
+      </tr>
+      <tr>
+        <td>Set 3</td>
+        <td>{{match.Set3.Player2.Rate}}</td>
+        <td>{{match.Set3.Player2.Score}}</td>
+        <td>{{match.Set3.OpponentMargin}} x3</td>
+        <td>{{match.Set3.OpponentAddOn}}</td>
+        <td>{{match.Set3.OpponentWinBonus}}</td>
+        <td>{{match.Set3.OpponentSetTotal}}</td>
+      </tr>
+      <tr>
+        <td colspan="6"></td>
+        <td>{{match.Set1.OpponentSetTotal + match.Set2.OpponentSetTotal + match.Set3.OpponentSetTotal }}</td>
+      </tr>
+      <tr>
+        <td>Set 4</td>
+        <td>{{match.Set4.Player2.Rate}}</td>
+        <td>{{match.Set4.Player2.Score}}</td>
+        <td>{{match.Set4.OpponentMargin}} x3</td>
+        <td>{{match.Set4.OpponentAddOn}}</td>
+        <td>{{match.Set4.OpponentWinBonus}}</td>
+        <td>{{match.Set4.OpponentSetTotal}}</td>
+      </tr>
+      <tr>
+        <td colspan="6"></td>
+        <td>{{match.Set1.OpponentSetTotal + match.Set2.OpponentSetTotal + match.Set3.OpponentSetTotal + match.Set4.OpponentSetTotal }}</td>
+      </tr>
+      <tr>
+        <td>Set 5</td>
+        <td>{{match.Set5.Player2.Rate}}</td>
+        <td>{{match.Set5.Player2.Score}}</td>
+        <td>{{match.Set5.OpponentMargin}} x3</td>
+        <td>{{match.Set5.OpponentAddOn}}</td>
+        <td>{{match.Set5.OpponentWinBonus}}</td>
+        <td>{{match.Set5.OpponentSetTotal}}</td>
+      </tr>
+      <tr>
+        <td colspan="6"></td>
+        <td>{{match.Set1.OpponentSetTotal + match.Set2.OpponentSetTotal + match.Set3.OpponentSetTotal + match.Set4.OpponentSetTotal + match.Set5.OpponentSetTotal }}</td>
+      </tr>
+      <tr>
+        <td colspan="6">
+          Total Rate: {{match.OpponentTotalRate}} / Over-Under: {{match.OpponentTotalRate - match.OverUnderPenalty}}
+        </td>
+        <td>{{match.OpponentTeamBonusOrPenalty}}</td>
+      </tr>
+      <tr>
+        <td colspan="7">Total Opponent Points: {{match.OpponentTotalScore}}</td>
+      </tr>
+    </table>
+  </div>
+</div>
+<input type="button" class="btn" value="Return to Match" (click)="onBack()"/>

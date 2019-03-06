@@ -11,10 +11,13 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using M8Scoring.ViewModels;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 
 namespace M8Scoring.Controllers {
+	[Authorize]
 	[Route("api/[controller]")]
 	public class MatchController : BaseApiController {
+
 		#region Private Fields
 
 		#endregion
@@ -44,36 +47,6 @@ namespace M8Scoring.Controllers {
 			if(match == null) {
 				return StatusCode(500, new BadRequestObjectResult("Match doesnt exist"));
 			}
-
-			//Match match = Match.CreateAdvancedMatch(true); 
-
-			//match.Team = DbContext.Teams.Include(p => p.TeamPlayers).ThenInclude(tp => tp.Player).Where(i => i.Id == 2).FirstOrDefault();
-			//match.Opponent = match.Team = DbContext.Teams.Include(p => p.TeamPlayers).ThenInclude(tp => tp.Player).Where(i => i.Id == 3).FirstOrDefault();
-
-			//match.Set1.Player1.Player = match.Team.TeamPlayers.ElementAt(0).Player;
-			//match.Set1.Player1.Rate = match.Set1.Player1.Player.Rating;
-			//match.Set1.Player2.Player = match.Opponent.TeamPlayers.ElementAt(0).Player;
-			//match.Set1.Player2.Rate = match.Set1.Player2.Player.Rating;
-
-			//match.Set2.Player1.Player = match.Team.TeamPlayers.ElementAt(1).Player;
-			//match.Set2.Player1.Rate = match.Set2.Player1.Player.Rating;
-			//match.Set2.Player2.Player = match.Opponent.TeamPlayers.ElementAt(1).Player;
-			//match.Set2.Player2.Rate = match.Set2.Player2.Player.Rating;
-
-			//match.Set3.Player1.Player = match.Team.TeamPlayers.ElementAt(2).Player;
-			//match.Set3.Player1.Rate = match.Set3.Player1.Player.Rating;
-			//match.Set3.Player2.Player = match.Opponent.TeamPlayers.ElementAt(2).Player;
-			//match.Set3.Player2.Rate = match.Set3.Player2.Player.Rating;
-
-			//match.Set4.Player1.Player = match.Team.TeamPlayers.ElementAt(3).Player;
-			//match.Set4.Player1.Rate = match.Set4.Player1.Player.Rating;
-			//match.Set4.Player2.Player = match.Opponent.TeamPlayers.ElementAt(3).Player;
-			//match.Set4.Player2.Rate = match.Set4.Player2.Player.Rating;
-
-			//match.Set5.Player1.Player = match.Team.TeamPlayers.ElementAt(4).Player;
-			//match.Set5.Player1.Rate = match.Set5.Player1.Player.Rating;
-			//match.Set5.Player2.Player = match.Opponent.TeamPlayers.ElementAt(4).Player;
-			//match.Set5.Player2.Rate = match.Set5.Player2.Player.Rating;
 
 			MatchViewModel vm = match.Adapt<MatchViewModel>();
 
@@ -110,49 +83,72 @@ namespace M8Scoring.Controllers {
 				return StatusCode(500, new BadRequestObjectResult("Match doesnt exist"));
 			}
 
-			match.Set1.Player1.PlayerId = model.Set1.Player1.Player.Id;
-			match.Set1.Player1.Rate = model.Set1.Player1.Rate;
-			match.Set1.Player1.Score = model.Set1.Player1.Score;
-			
-			match.Set1.Player2.PlayerId = model.Set1.Player2.Player.Id;
-			match.Set1.Player2.Rate = model.Set1.Player2.Rate;
-			match.Set1.Player2.Score = model.Set1.Player2.Score;
-			match.Set1.Win = model.Set1.Win;
-	
-			match.Set2.Player1.PlayerId = model.Set2.Player1.Player.Id;
-			match.Set2.Player1.Rate = model.Set2.Player1.Rate;
-			match.Set2.Player1.Score = model.Set2.Player1.Score;
+			if(model.Set1.Player1.Player != null) {
+				match.Set1.Player1.PlayerId = model.Set1.Player1.Player.Id;
+				match.Set1.Player1.Rate = model.Set1.Player1.Rate;
+				match.Set1.Player1.Score = model.Set1.Player1.Score;
+			}
 
-			match.Set2.Player2.PlayerId = model.Set2.Player2.Player.Id;
-			match.Set2.Player2.Rate = model.Set2.Player2.Rate;
-			match.Set2.Player2.Score = model.Set2.Player2.Score;
+			if(model.Set1.Player2.Player != null) {
+				match.Set1.Player2.PlayerId = model.Set1.Player2.Player.Id;
+				match.Set1.Player2.Rate = model.Set1.Player2.Rate;
+				match.Set1.Player2.Score = model.Set1.Player2.Score;
+			}
+
+			match.Set1.Win = model.Set1.Win;
+
+			if(model.Set2.Player1.Player != null) {
+				match.Set2.Player1.PlayerId = model.Set2.Player1.Player.Id;
+				match.Set2.Player1.Rate = model.Set2.Player1.Rate;
+				match.Set2.Player1.Score = model.Set2.Player1.Score;
+			}
+
+			if(model.Set2.Player2.Player != null) {
+				match.Set2.Player2.PlayerId = model.Set2.Player2.Player.Id;
+				match.Set2.Player2.Rate = model.Set2.Player2.Rate;
+				match.Set2.Player2.Score = model.Set2.Player2.Score;
+			}
+
 			match.Set2.Win = model.Set2.Win;
 
-			match.Set3.Player1.PlayerId = model.Set3.Player1.Player.Id;
-			match.Set3.Player1.Rate = model.Set3.Player1.Rate;
-			match.Set3.Player1.Score = model.Set3.Player1.Score;
+			if(model.Set3.Player1.Player != null) {
+				match.Set3.Player1.PlayerId = model.Set3.Player1.Player.Id;
+				match.Set3.Player1.Rate = model.Set3.Player1.Rate;
+				match.Set3.Player1.Score = model.Set3.Player1.Score;
+			}
 
-			match.Set3.Player2.PlayerId = model.Set3.Player2.Player.Id;
-			match.Set3.Player2.Rate = model.Set3.Player2.Rate;
-			match.Set3.Player2.Score = model.Set3.Player2.Score;
+			if(model.Set3.Player2.Player != null) {
+				match.Set3.Player2.PlayerId = model.Set3.Player2.Player.Id;
+				match.Set3.Player2.Rate = model.Set3.Player2.Rate;
+				match.Set3.Player2.Score = model.Set3.Player2.Score;
+			}
 			match.Set3.Win = model.Set3.Win;
 
-			match.Set4.Player1.PlayerId = model.Set4.Player1.Player.Id;
-			match.Set4.Player1.Rate = model.Set4.Player1.Rate;
-			match.Set4.Player1.Score = model.Set4.Player1.Score;
+			if(model.Set4.Player1.Player != null) {
+				match.Set4.Player1.PlayerId = model.Set4.Player1.Player.Id;
+				match.Set4.Player1.Rate = model.Set4.Player1.Rate;
+				match.Set4.Player1.Score = model.Set4.Player1.Score;
+			}
 
-			match.Set4.Player2.PlayerId = model.Set4.Player2.Player.Id;
-			match.Set4.Player2.Rate = model.Set4.Player2.Rate;
-			match.Set4.Player2.Score = model.Set4.Player2.Score;
+			if(model.Set4.Player2.Player != null) {
+				match.Set4.Player2.PlayerId = model.Set4.Player2.Player.Id;
+				match.Set4.Player2.Rate = model.Set4.Player2.Rate;
+				match.Set4.Player2.Score = model.Set4.Player2.Score;
+			}
 			match.Set4.Win = model.Set4.Win;
 
-			match.Set5.Player1.PlayerId = model.Set5.Player1.Player.Id;
-			match.Set5.Player1.Rate = model.Set5.Player1.Rate;
-			match.Set5.Player1.Score = model.Set5.Player1.Score;
+			if(model.Set5.Player1.Player != null) {
+				match.Set5.Player1.PlayerId = model.Set5.Player1.Player.Id;
+				match.Set5.Player1.Rate = model.Set5.Player1.Rate;
+				match.Set5.Player1.Score = model.Set5.Player1.Score;
+			}
 
-			match.Set5.Player2.PlayerId = model.Set5.Player2.Player.Id;
-			match.Set5.Player2.Rate = model.Set5.Player2.Rate;
-			match.Set5.Player2.Score = model.Set5.Player2.Score;
+			if(model.Set5.Player2.Player != null) {
+				match.Set5.Player2.PlayerId = model.Set5.Player2.Player.Id;
+				match.Set5.Player2.Rate = model.Set5.Player2.Rate;
+				match.Set5.Player2.Score = model.Set5.Player2.Score;
+			}
+
 			match.Set5.Win = model.Set5.Win;
 
 			match.TotalOpponentScore = model.TotalOpponentScore;
@@ -179,7 +175,7 @@ namespace M8Scoring.Controllers {
 				case "open":
 				case "advance":
 				case "masters":
-					default:
+				default:
 					match = Match.CreateAdvancedMatch(model.IsRegularSeason);
 					break;
 			}
@@ -188,7 +184,7 @@ namespace M8Scoring.Controllers {
 			match.OpponentId = model.OpponentId;
 			match.Date = model.Date;
 			match.Location = model.Location;
-		
+
 			//override serverside only properties
 			match.CreatedDate = DateTime.Now;
 			match.LastModifiedDate = match.CreatedDate;

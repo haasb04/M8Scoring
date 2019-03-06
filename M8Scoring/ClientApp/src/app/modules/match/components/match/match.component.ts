@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, SimpleChange, SimpleChanges } from '@angular/core';
 import { MatchService } from '../../services/match.service';
-import { Route, ActivatedRoute } from '@angular/router';
+import { Route, ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-match',
@@ -14,7 +14,7 @@ export class MatchComponent implements OnInit{
   playerScore: number;
   opponentScore: number;
 
-  constructor(private matchService: MatchService, @Inject('BASE_URL') private baseUrl: string, private activatedRoute: ActivatedRoute) {
+  constructor(private matchService: MatchService, @Inject('BASE_URL') private baseUrl: string, private activatedRoute: ActivatedRoute, public router:Router) {
     var matchId = +this.activatedRoute.snapshot.params["id"];
     this.matchService.getMatch(matchId).subscribe(
       data => {
@@ -28,13 +28,11 @@ export class MatchComponent implements OnInit{
 
   }
 
-  
-
   onSave() {
     this.matchService.saveMatch();
   }
 
-  togglePanel() {
-    this.hidePanel = !this.hidePanel;
+  showReportView() {
+    this.router.navigate(["match/reportView/"]);
   }
 }

@@ -4,6 +4,7 @@
 <div *ngIf="match">
   <div>Match:  {{match.Team.Name}} vs {{match.Opponent.Name}} </div>
   <div>{{match.Id}}</div>
+  <input type="button" class="btn" [disabled]="match==null || matchService.working" value="Report View" (click)="showReportView()" />
   <hr />
 
   <form #matchForm="ngForm">
@@ -15,4 +16,6 @@
     <app-match-set [matchSet]="match.Set5"></app-match-set>
     <button type="submit" class="btn btn-success" [disabled]="match==null || matchService.working" (click)="onSave()">Save</button>
   </form>
+
+  <fifth-set-scenario></fifth-set-scenario>
 </div>
