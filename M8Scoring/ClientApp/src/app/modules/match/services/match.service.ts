@@ -1,8 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { last } from '@angular/router/src/utils/collection';
 import { ReplaySubject } from 'rxjs';
-import { settings } from 'cluster';
 
 @Injectable()
 export class MatchService {
@@ -14,7 +12,6 @@ export class MatchService {
   constructor(private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: any,
     @Inject('BASE_URL') private baseUrl: string) {
-    //this.createMatch(1, 2);
   }
 
   saveMatch() {
