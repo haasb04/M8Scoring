@@ -2,7 +2,6 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { last } from '@angular/router/src/utils/collection';
 import { ReplaySubject } from 'rxjs';
-import { settings } from 'cluster';
 
 @Injectable()
 export class MatchService {
