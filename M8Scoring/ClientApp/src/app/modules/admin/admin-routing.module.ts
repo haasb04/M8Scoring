@@ -9,6 +9,7 @@ import { TeamEditComponent } from './components/team-edit/team-edit.component';
 import { TeamComponent } from './components/team/team.component';
 import { PlayerEditComponent } from './components/player-edit/player-edit.component';
 import { PlayerComponent } from './components/player/player.component';
+import { M8ImportComponent } from './components/m8-import/m8-import.component';
 
 const routes = [
   {
@@ -22,7 +23,8 @@ const routes = [
       { path: 'players', component: PlayerListComponent },
       { path: 'player/create', component: PlayerEditComponent },
       { path: 'player/edit/:id', component: PlayerEditComponent },
-      { path: 'player/:id', component: PlayerComponent }
+      { path: 'player/:id', component: PlayerComponent },
+      { path: 'import', component: M8ImportComponent}
     ]
   }
 ];

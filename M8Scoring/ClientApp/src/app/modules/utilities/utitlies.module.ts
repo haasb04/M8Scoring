@@ -8,6 +8,7 @@ import { SortService } from './services/sort.service';
 import { TableFilterComponent } from './components/table-filter/table-filter.component';
 import { FormsModule } from '@angular/forms';
 import { SpfBaseComponent } from './components/spf-base/spf-base.component';
+import { UploadComponent } from './components/upload/upload.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { SpfBaseComponent } from './components/spf-base/spf-base.component';
     TablePagingComponent,
     SortableTableDirective,
     TableFilterComponent,
-    SpfBaseComponent
+    SpfBaseComponent,
+    UploadComponent
   ],
   imports: [
     CommonModule, FormsModule
@@ -25,7 +27,8 @@ import { SpfBaseComponent } from './components/spf-base/spf-base.component';
     TablePagingComponent,
     SortableColumnComponent,
     SortableTableDirective,
-    TableFilterComponent 
+    TableFilterComponent,
+    UploadComponent
   ],
   providers:[SortService]
 })

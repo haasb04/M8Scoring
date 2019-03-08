@@ -13,6 +13,7 @@ import { TeamEditComponent } from './components/team-edit/team-edit.component';
 import { PlayerPickerComponent } from './components/player-picker/player-picker.component';
 import { PlayerEditComponent } from './components/player-edit/player-edit.component';
 import { PlayerComponent } from './components/player/player.component';
+import { M8ImportComponent } from './components/m8-import/m8-import.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { PlayerComponent } from './components/player/player.component';
     PlayerListComponent,
     PlayerComponent,
     PlayerPickerComponent,
-    PlayerEditComponent
+    PlayerEditComponent,
+    M8ImportComponent
   ]
 })
 export class AdminModule { }
