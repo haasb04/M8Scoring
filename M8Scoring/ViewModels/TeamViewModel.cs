@@ -15,6 +15,8 @@ namespace M8Scoring.ViewModels {
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public int Number { get; set; }
+		public string Home { get; set; }
+		public string Level { get; set; }
 		public DateTime LastModifiedDate { get; set; }
 		public DateTime CreatedDate { get; set; }
 		public PlayerViewModel[] Players { get; set; }

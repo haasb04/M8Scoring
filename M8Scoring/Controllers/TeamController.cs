@@ -130,6 +130,8 @@ namespace M8Scoring.Controllers {
 			//properties taken from the request
 			team.Number = model.Number;
 			team.Name = model.Name;
+			team.Home = model.Home;
+			team.Level = model.Level;
 			team.CreatedDate = DateTime.Now;
 			team.LastModifiedDate = team.CreatedDate;
 			//team owner???
@@ -167,7 +169,8 @@ namespace M8Scoring.Controllers {
 			//handle the update
 			team.Name = model.Name;
 			team.Number = model.Number;
-
+			team.Home = model.Home;
+			team.Level = model.Level;
 			team.LastModifiedDate = DateTime.Now;
 
 			foreach(PlayerViewModel pvm in model.Players) {

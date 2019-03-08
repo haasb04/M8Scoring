@@ -93,6 +93,7 @@ namespace M8Scoring.Controllers {
 			player.Number = model.Number;
 			player.FirstName = model.FirstName;
 			player.LastName = model.LastName;
+			player.Rating = model.Rating;
 			player.CreatedDate = DateTime.Now;
 			player.LastModifiedDate = player.CreatedDate;
 

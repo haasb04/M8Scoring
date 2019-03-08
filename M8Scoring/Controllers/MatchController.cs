@@ -152,7 +152,7 @@ namespace M8Scoring.Controllers {
 			match.Set5.Win = model.Set5.Win;
 
 			match.TotalOpponentScore = model.TotalOpponentScore;
-			match.TotalScore = model.TotalOpponentScore;
+			match.TotalScore = model.TotalScore;
 
 			//override serverside only properties
 			match.LastModifiedDate = DateTime.Now;

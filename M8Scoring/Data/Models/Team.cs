@@ -33,6 +33,9 @@ namespace M8Scoring.Data {
 		[Required]
 		public int Number { get; set; }
 
+		public string Home { get; set; }
+		public string Level { get; set; }
+
 		[Required]
 		public DateTime CreatedDate { get; set; }
 

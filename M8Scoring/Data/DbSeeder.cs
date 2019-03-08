@@ -15,6 +15,7 @@ namespace M8Scoring.Data {
 
 			}
 
+#if(DEBUG)
 			//create test players and teams
 			if(!dbContext.Teams.Any()) {
 				createTestTeams(dbContext);
@@ -25,7 +26,7 @@ namespace M8Scoring.Data {
 			if(!dbContext.Matches.Any()) {
 				createSubscriptionMatches(dbContext);
 			}
-
+#endif
 
 			//TEMP
 			//Match m = dbContext.Matches
@@ -203,8 +204,8 @@ namespace M8Scoring.Data {
 						.ThenInclude(t => t.SubscriptionTeams)
 						.Where(u => u.UserName == "Ryan").FirstOrDefault();
 
-					var team1 = dbContext.Teams.Find(1);
-					var team2 = dbContext.Teams.Find(2);
+					var team1 = dbContext.Teams.Find(3002);
+					var team2 = dbContext.Teams.Find(3003);
 
 					ryan.Subscription.SubscriptionTeams.Add(new SubscriptionTeam() { Team = team1, Subscription = ryan.Subscription });
 					ryan.Subscription.SubscriptionTeams.Add(new SubscriptionTeam() { Team = team2, Subscription = ryan.Subscription });
@@ -214,7 +215,7 @@ namespace M8Scoring.Data {
 						.Include(s => s.Subscription)
 						.ThenInclude(t => t.SubscriptionTeams)
 						.Where(u => u.UserName == "Vodan").FirstOrDefault();
-					var team3 = dbContext.Teams.Find(3);
+					var team3 = dbContext.Teams.Find(3004);
 
 					vodan.Subscription.SubscriptionTeams.Add(new SubscriptionTeam() { Team = team3, Subscription = vodan.Subscription });
 #endif
